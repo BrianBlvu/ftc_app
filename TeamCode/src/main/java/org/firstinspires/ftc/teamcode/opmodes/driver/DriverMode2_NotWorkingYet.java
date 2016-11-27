@@ -30,9 +30,8 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode.opmodes.autonomous;
+package org.firstinspires.ftc.teamcode.opmodes.driver;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -57,8 +56,8 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareK9bot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="SimpleStrat1", group="Autonomous")
-public class SimpleStrategy_StartPosition1 extends LinearOpMode {
+@TeleOp(name="DriverMode2_NotWorkingYet", group="driver")
+public class DriverMode2_NotWorkingYet extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareK9bot   robot           = new HardwareK9bot();              // Use a K9'shardware
@@ -71,10 +70,6 @@ public class SimpleStrategy_StartPosition1 extends LinearOpMode {
     public void runOpMode() {
         double left;
         double right;
-
-        long moveForward1Millisecond = 1000;
-        long turnRightMilliseconds = 1000;
-        long moveForward2Milliseconds = 1000;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -91,53 +86,40 @@ public class SimpleStrategy_StartPosition1 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            //move forward
-            left = .1;
-            right = .1;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
-            try {
-                wait(moveForward1Millisecond);
-            }
-            catch(Exception e)
-            {
+            // TODO: Make left use left stick and right use right stick
+            // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
+            right = gamepad1.right_stick_y*gamepad1.right_stick_y * (gamepad1.right_stick_y < 0 ? 1 : -1);
+            left = gamepad1.left_stick_y*gamepad1.left_stick_y * (gamepad1.left_stick_y < 0 ? 1 : -1);
+            robot.frontLeftMotor.setPower(right);
+            robot.frontRightMotor.setPower(left);
 
-            }
-            // turn right
+            // Use gamepad Y & A raise and lower the arm
+            /*if (gamepad1.a)
+                armPosition += ARM_SPEED;
+            else if (gamepad1.y)
+                armPosition -= ARM_SPEED;
 
-            left = .1;
-            right = -.1;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
-            try {
-                wait(turnRightMilliseconds);
-            }
-            catch(Exception e)
-            {
+            // Use gamepad X & B to open and close the claw
+            if (gamepad1.x)
+                clawPosition += CLAW_SPEED;
+            else if (gamepad1.b)
+                clawPosition -= CLAW_SPEED;
 
-            }
-            // move forward
+            // Move both servos to new position.
+            armPosition  = Range.clip(armPosition, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE);
+            robot.arm.setPosition(armPosition);
+            clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
+            robot.claw.setPosition(clawPosition);
 
-            left = .1;
-            right = .1;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
-            try {
-                wait(moveForward2Milliseconds);
-            }
-            catch(Exception e)
-            {
-
-            }
-
-            // turn right
+            // Send telemetry message to signify robot running;
+            telemetry.addData("arm",   "%.2f", armPosition);
+            telemetry.addData("claw",  "%.2f", clawPosition);*/
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.update();
-            break;
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
-            //robot.waitForTick(40);
+            robot.waitForTick(40);
         }
     }
 }
