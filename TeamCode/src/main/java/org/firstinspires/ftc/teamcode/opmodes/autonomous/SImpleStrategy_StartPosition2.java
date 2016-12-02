@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareK9bot;
 @Autonomous(name="AutonomousMode2", group="Autonomous")
 public class SimpleStrategy_StartPosition2 extends LinearOpMode {
     /* Declare OpMode members. */
-    HardwareK9bot robot           = new HardwareK9bot();              // Use a K9's hardware
+    HardwareK9bot robot           = new HardwareK9bot();                // Use a K9's hardware
     double          armPosition     = robot.ARM_HOME;                   // Servo safe position
     double          clawPosition    = robot.CLAW_HOME;                  // Servo safe position
     final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
@@ -44,20 +44,21 @@ public class SimpleStrategy_StartPosition2 extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            telemetry.addData("Say", "IN WHILE STATEMENT");
+            telemetry.addData("Say", "I AM IN THE WHILE STATEMENT");
             telemetry.update();
 
             //move forward
             left = motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.frontLeftMotor.setPower(right);
+            robot.frontRightMotor.setPower(left);
             try {
                 robot.waitForTick(moveForward1Millisecond);
                 telemetry.addData("Say", "Forward");
+                telemetry.addData("Say", "I AM STILL IN THE WHILE STATEMENT");
                 telemetry.update();
             }
-            catch(Exception e)
+            catch(Exception f)
             {
                 telemetry.addData("Exception", e.getMessage());
             }
@@ -67,7 +68,7 @@ public class SimpleStrategy_StartPosition2 extends LinearOpMode {
             telemetry.update();
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
-            robot.waitForTick(40);
+            robot.waitForTick(100);
             break;
 
         }
