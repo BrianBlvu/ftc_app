@@ -100,7 +100,7 @@ public class SimpleStrategy_StartPosition1Red extends LinearOpMode {
             robot.frontLeftMotor.setPower(left);
             robot.frontRightMotor.setPower(right);
             try {
-                robot.waitForTick(moveForward2Milliseconds);
+                robot.waitForTick(moveForward1Millisecond);
                 telemetry.addData("Say", "Forward");
                 telemetry.update();
             }
@@ -138,7 +138,7 @@ public class SimpleStrategy_StartPosition1Red extends LinearOpMode {
             {
                 telemetry.addData("Exception", e.getMessage());
             }
-            /*//turn left
+            //turn left
             left = -motorSpeed;
             right = motorSpeed;
             robot.frontLeftMotor.setPower(left);
@@ -167,7 +167,7 @@ public class SimpleStrategy_StartPosition1Red extends LinearOpMode {
             {
                 telemetry.addData("Exception", e.getMessage());
             }
-            */// turn right
+            // turn right
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.update();
