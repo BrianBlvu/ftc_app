@@ -18,7 +18,7 @@ public class BlueRamp1_WorkInProgress extends LinearOpMode {
     {
     }
     /* Declare OpMode members. */
-    HardwareK9bot robot           = new HardwareK9bot();              // Use a K9's hardware
+    HardwareK9bot robot           = new HardwareK9bot();              // Use a K9'shardware
     double          armPosition     = robot.ARM_HOME;                   // Servo safe position
     double          clawPosition    = robot.CLAW_HOME;                  // Servo safe position
     final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo

@@ -75,6 +75,7 @@ public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
         long moveForward1Millisecond = 1000;
         long turnRightMilliseconds = 1000;
         long moveForward2Milliseconds = 2000;
+        long moveForward3Milliseconds = 3000;
         double motorSpeed = 0.5;
 
         /* Initialize the hardware variables.

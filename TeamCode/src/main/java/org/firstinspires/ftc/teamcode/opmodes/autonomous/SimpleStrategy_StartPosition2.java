@@ -8,10 +8,10 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareK9bot;
 /**
  * Created by Thomas on 11/19/2016.
  */
-@Autonomous(name="AutonomousMode1Blue", group="Autonomous")
-public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
-    {
-    }
+
+
+@Autonomous(name="AutonomousMode2", group="Autonomous")
+public class SimpleStrategy_StartPosition2 extends LinearOpMode {
     /* Declare OpMode members. */
     HardwareK9bot robot           = new HardwareK9bot();              // Use a K9'shardware
     double          armPosition     = robot.ARM_HOME;                   // Servo safe position
@@ -27,6 +27,7 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
         long moveForward1Millisecond = 1000;
         long turnRightMilliseconds = 1000;
         long moveForward2Milliseconds = 2000;
+        long moveForward3Milliseconds = 3000;
         double motorSpeed = 0.5;
 
         /* Initialize the hardware variables.
@@ -52,7 +53,7 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
             robot.frontLeftMotor.setPower(left);
             robot.frontRightMotor.setPower(right);
             try {
-                robot.waitForTick(moveForward2Milliseconds);
+                robot.waitForTick(moveForward1Millisecond);
                 telemetry.addData("Say", "Forward");
                 telemetry.update();
             }
@@ -60,66 +61,7 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
             {
                 telemetry.addData("Exception", e.getMessage());
             }
-            // turn left
 
-            left = -motorSpeed;
-            right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
-            try {
-                robot.waitForTick(turnRightMilliseconds);
-                telemetry.addData("Say", "Right");
-                telemetry.update();
-            }
-            catch(Exception e)
-            {
-                telemetry.addData("Exception", e.getMessage());
-            }
-            // move forward
-
-            left = motorSpeed;
-            right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
-            try {
-                robot.waitForTick(moveForward2Milliseconds);
-                telemetry.addData("Say", "Forward");
-                telemetry.update();
-            }
-            catch(Exception e)
-            {
-                telemetry.addData("Exception", e.getMessage());
-            }
-            /*//turn right
-            left = motorSpeed;
-            right = -motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
-            try {
-                robot.waitForTick(turnRightMilliseconds);
-                telemetry.addData("Say", "Left");
-                telemetry.update();
-            }
-            catch(Exception e)
-            {
-                telemetry.addData("Exception", e.getMessage());
-            }
-            // move forward
-
-            left = motorSpeed;
-            right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
-            try {
-                robot.waitForTick(moveForward2Milliseconds);
-                telemetry.addData("Say", "Forward");
-                telemetry.update();
-            }
-            catch(Exception e)
-            {
-                telemetry.addData("Exception", e.getMessage());
-            }*/
-            // turn right
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.update();

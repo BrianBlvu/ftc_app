@@ -132,4 +132,3 @@ public class SimpleStrategy_StartPosition3Red extends LinearOpMode {
         }
     }
 }
-//Jacob edited this and can push to github
