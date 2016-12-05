@@ -91,7 +91,10 @@ public class DriverMode1_Gavin extends LinearOpMode {
 
             right = gamepad1.right_stick_y*gamepad1.right_stick_y * (gamepad1.right_stick_y < 0 ? 1 : -1);
             left = gamepad1.left_stick_y*gamepad1.left_stick_y * (gamepad1.left_stick_y < 0 ? 1 : -1);
-
+            /*
+            This code SHOULD make the robot go slower when you pull the triggers. I have been working on this the past couple practices.
+            Can someone please proof-read my code and tell me if I made any mistakes? Thanks!
+             */
             rightSpeed = gamepad1.right_trigger*gamepad1.right_trigger * (gamepad1.right_trigger < 0 ? 1 : -1);
             leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger * (gamepad1.left_trigger < 0 ? 1 : -1);
 
