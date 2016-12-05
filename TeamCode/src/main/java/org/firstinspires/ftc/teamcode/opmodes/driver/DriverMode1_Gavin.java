@@ -92,8 +92,8 @@ public class DriverMode1_Gavin extends LinearOpMode {
             right = gamepad1.right_stick_y*gamepad1.right_stick_y * (gamepad1.right_stick_y < 0 ? 1 : -1);
             left = gamepad1.left_stick_y*gamepad1.left_stick_y * (gamepad1.left_stick_y < 0 ? 1 : -1);
 
-            rightSpeed = gamepad2.right_stick_y*gamepad1.right_stick_y * (gamepad1.right_stick_y < 0 ? 1 : -1);
-            leftSpeed = gamepad2.left_stick_y*gamepad1.left_stick_y * (gamepad1.left_stick_y < 0 ? 1 : -1);
+            rightSpeed = gamepad1.right_trigger*gamepad1.right_trigger * (gamepad1.right_trigger < 0 ? 1 : -1);
+            leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger * (gamepad1.left_trigger < 0 ? 1 : -1);
 
             robot.frontLeftMotor.setPower(right - rightSpeed);
             robot.frontRightMotor.setPower(left - leftSpeed);
