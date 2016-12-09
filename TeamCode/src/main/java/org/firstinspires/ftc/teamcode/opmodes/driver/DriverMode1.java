@@ -54,10 +54,11 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareK9bot;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-//@Disabled
+//
+// @Disabled
 
-@TeleOp(name="DriverMode1_Gavin", group="driver")
-public class DriverMode1_Gavin extends LinearOpMode {
+@TeleOp(name="DriverMode1", group="driver")
+public class DriverMode1 extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareK9bot   robot           = new HardwareK9bot();              // Use a K9's hardware
@@ -91,17 +92,17 @@ public class DriverMode1_Gavin extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-            right = gamepad1.right_stick_y*gamepad1.right_stick_y * (gamepad1.right_stick_y < 0 ? 1 : -1);
-            left = gamepad1.left_stick_y*gamepad1.left_stick_y * (gamepad1.left_stick_y < 0 ? 1 : -1);
+            right = gamepad1.right_stick_y*gamepad1.right_stick_y * (gamepad1.right_stick_y < 0 ? -1 : 1);
+            left = gamepad1.left_stick_y*gamepad1.left_stick_y * (gamepad1.left_stick_y < 0 ? -1 : 1);
             /*
             This code SHOULD make the robot go slower when you pull the triggers. I have been working on this the past couple practices.
             Can someone please proof-read my code and tell me if I made any mistakes? Thanks!
              */
-            rightSpeed = gamepad1.right_trigger*gamepad1.right_trigger * (gamepad1.right_trigger < 0 ? 1 : -1);
-            leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger * (gamepad1.left_trigger < 0 ? 1 : -1);
+           // rightSpeed = gamepad1.right_trigger*gamepad1.right_trigger * (gamepad1.right_trigger < 0 ? 1 : -1);
+           // leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger * (gamepad1.left_trigger < 0 ? 1 : -1);
 
-            robot.frontLeftMotor.setPower(right - rightSpeed);
-            robot.frontRightMotor.setPower(left - leftSpeed);
+            robot.frontLeftMotor.setPower(left);
+            robot.frontRightMotor.setPower(right);
 
             // Use gamepad Y & A raise and lower the arm
             /*if (gamepad1.a)
