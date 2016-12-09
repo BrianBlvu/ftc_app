@@ -98,9 +98,15 @@ public class DriverMode1 extends LinearOpMode {
             This code SHOULD make the robot go slower when you pull the triggers. I have been working on this the past couple practices.
             Can someone please proof-read my code and tell me if I made any mistakes? Thanks!
              */
-           // rightSpeed = gamepad1.right_trigger*gamepad1.right_trigger * (gamepad1.right_trigger < 0 ? 1 : -1);
-           // leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger * (gamepad1.left_trigger < 0 ? 1 : -1);
+            rightSpeed = gamepad1.right_trigger*gamepad1.right_trigger;
+            leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger;
 
+            if (leftSpeed > 0.01) {
+                left = leftSpeed;
+            }
+            if (rightSpeed > 0.01) {
+                right = rightSpeed;
+            }
             robot.frontLeftMotor.setPower(left);
             robot.frontRightMotor.setPower(right);
 
