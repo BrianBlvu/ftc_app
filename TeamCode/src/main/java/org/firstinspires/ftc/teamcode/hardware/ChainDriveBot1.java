@@ -23,7 +23,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   As the arm servo approaches 0, the arm position moves up (away from the floor).
  *   As the claw servo approaches 0, the claw opens up (drops the game element).
  */
-public class HardwareK9bot
+public class ChainDriveBot1
 {
     /* Public OpMode members. */
     public DcMotor  frontLeftMotor   = null;
@@ -45,7 +45,7 @@ public class HardwareK9bot
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwareK9bot() {
+    public ChainDriveBot1() {
     }
 
     /* Initialize standard Hardware interfaces */

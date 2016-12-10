@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.hardware.HardwareK9bot;
+import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 
 /**
  * This OpMode uses the common HardwareK9bot class to define the devices on the robot.
@@ -61,7 +61,7 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareK9bot;
 public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareK9bot   robot           = new HardwareK9bot();              // Use a K9'shardware
+    ChainDriveBot1   robot           = new ChainDriveBot1();              // Use a K9'shardware
     double          armPosition     = robot.ARM_HOME;                   // Servo safe position
     double          clawPosition    = robot.CLAW_HOME;                  // Servo safe position
     final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo

@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.hardware.HardwareK9bot;
+import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.State.START;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.State.STARTED;
@@ -79,7 +79,7 @@ public class StateStrategy extends LinearOpMode {
         WHITE
     }
 
-    HardwareK9bot robot = new HardwareK9bot();
+    ChainDriveBot1 robot = new ChainDriveBot1();
     ColorSensor colorSensorBottom;
     ColorSensor colorSensorLeft;
     ColorSensor colorSensorRight;
