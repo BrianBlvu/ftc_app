@@ -54,24 +54,30 @@ public class ChainDriveBot1
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        frontLeftMotor   = hwMap.dcMotor.get("left_drive");
-        frontRightMotor  = hwMap.dcMotor.get("right_drive");
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        try {
+            frontLeftMotor = hwMap.dcMotor.get("left_drive");
+            frontRightMotor = hwMap.dcMotor.get("right_drive");
+            frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        // Set all motors to zero power
-        frontLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
+            // Set all motors to zero power
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
 
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            // Set all motors to run without encoders.
+            // May want to use RUN_USING_ENCODERS if encoders are installed.
+            frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        catch(Exception e)
+        {
+
+        }
 
         // Define and initialize ALL installed servos.
         try{
-            arm = hwMap.servo.get("arm");
+            //arm = hwMap.servo.get("arm");
             claw = hwMap.servo.get("beacon_pusher");
-            arm.setPosition(ARM_HOME);
+            //arm.setPosition(ARM_HOME);
             claw.setPosition(CLAW_HOME);
         }
         catch(Exception e)
