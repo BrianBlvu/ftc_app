@@ -102,10 +102,10 @@ public class DriverMode1 extends LinearOpMode {
             leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger;
 
             if (leftSpeed > 0.01) {
-                left = leftSpeed;
+                left = -leftSpeed;
             }
             if (rightSpeed > 0.01) {
-                right = rightSpeed;
+                right = -rightSpeed;
             }
             robot.frontLeftMotor.setPower(left);
             robot.frontRightMotor.setPower(right);

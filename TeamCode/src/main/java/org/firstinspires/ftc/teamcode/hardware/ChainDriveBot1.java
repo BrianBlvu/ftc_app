@@ -70,7 +70,7 @@ public class HardwareK9bot
         // Define and initialize ALL installed servos.
         try{
             arm = hwMap.servo.get("arm");
-            claw = hwMap.servo.get("claw");
+            claw = hwMap.servo.get("beacon_pusher");
             arm.setPosition(ARM_HOME);
             claw.setPosition(CLAW_HOME);
         }
