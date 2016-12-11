@@ -32,123 +32,113 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode.opmodes.driver;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 
 /**
- * This OpMode uses the common ChainDriveBot1 class to define the devices on the robot.
+ * This OpMode uses the ChainDriveBot1 class to define the devices on the robot.
  * All device access is managed through the ChainDriveBot1 class. (See this class for device names)
  * The code is structured as a LinearOpMode
  *
- * This particular OpMode executes a basic Tank Drive Teleop for the K9 bot
- * It raises and lowers the arm using the Gampad Y and A buttons respectively.
- * It also opens and closes the claw slowly using the X and B buttons.
- *
- * Note: the configuration of the servos is such that
- * as the arm servo approaches 0, the arm position moves up (away from the floor).
- * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ * This particular OpMode executes a basic Tank Drive Teleop for the ChainDrive1 bot
+ * It moves the beacon pusher with the Gampad X and B buttons respectively.
  */
-//
-// @Disabled
 
 @TeleOp(name="DriverMode1", group="driver")
 public class DriverMode1 extends LinearOpMode {
 
-    /* Declare OpMode members. */
-    ChainDriveBot1   robot           = new ChainDriveBot1();              // Use a K9's hardware
-    double          armPosition     = robot.ARM_HOME;                   // Servo safe position
-    double          clawPosition    = robot.CLAW_HOME;                  // Servo safe position
-    final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
-    final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
+    private ChainDriveBot1 robot = new ChainDriveBot1();
+    private double beaconPusherPosition = ChainDriveBot1.BEACON_PUSHER_HOME; // Servo safe position
 
     @Override
     public void runOpMode() {
-        double left;
-        double right;
-        double leftSpeed;
-        double rightSpeed;
+        double leftMotorSpeed;
+        double rightMotorSpeed;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-        robot.init(hardwareMap);
+        try {
+            robot.init(hardwareMap);
+        } catch (Exception e)
+        {
+            telemetry.addData("Failed to Initialize Robot: ",  e.getMessage());
+        }
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("DriverMode1", "Initialized");
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        telemetry.addData("Say", "Hit start");
+        telemetry.addData("DriverMode1", "Starting");
         telemetry.update();
 
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+        try{
+            // run until the end of the match (driver presses STOP)
+            while (opModeIsActive()) {
+                leftMotorSpeed = gamepad1.left_stick_y;
+                rightMotorSpeed = gamepad1.right_stick_y;
 
+                // If either trigger is pulled more than a little bit, cut the robot's speed 10x
+                if (gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1) {
+                    leftMotorSpeed = leftMotorSpeed / 10;
+                    rightMotorSpeed = rightMotorSpeed / 10;
+                }
 
-            right = gamepad1.right_stick_y*gamepad1.right_stick_y * (gamepad1.right_stick_y < 0 ? -1 : 1);
-            left = gamepad1.left_stick_y*gamepad1.left_stick_y * (gamepad1.left_stick_y < 0 ? -1 : 1);
-            /*
-            This code SHOULD make the robot go slower when you pull the triggers. I have been working on this the past couple practices.
-            Can someone please proof-read my code and tell me if I made any mistakes? Thanks!
-             */
-            rightSpeed = gamepad1.right_trigger*gamepad1.right_trigger;
-            leftSpeed = gamepad1.left_trigger*gamepad1.left_trigger;
+                if (robot.leftMotor != null) {
+                    robot.leftMotor.setPower(leftMotorSpeed);
+                } else {
+                    telemetry.addData("left motor not installed", "");
+                }
+                if (robot.rightMotor != null) {
+                    robot.rightMotor.setPower(rightMotorSpeed);
+                } else {
+                    telemetry.addData("right motor not installed", "");
+                }
 
-            if (leftSpeed > 0.01) {
-                left = -leftSpeed;
+                // Use gamepad X & B to open and close the beaconPusher
+                if (gamepad1.x)
+                    beaconPusherPosition += ChainDriveBot1.BEACON_PUSHER_SPEED;
+                else if (gamepad1.b)
+                    beaconPusherPosition -= ChainDriveBot1.BEACON_PUSHER_SPEED;
+
+                beaconPusherPosition = Range.clip(beaconPusherPosition,
+                        ChainDriveBot1.BEACON_PUSHER_MIN_RANGE,
+                        ChainDriveBot1.BEACON_PUSHER_MAX_RANGE);
+
+                if (null != robot.beaconPusher) {
+                    robot.beaconPusher.setPosition(beaconPusherPosition);
+                } else {
+                    telemetry.addData("No beaconPusher installed", "");
+                }
+
+                // show the values we're currently feeding the motors
+                telemetry.addData("Controls", "left: %.2f, right: %.2f, beaconPusher: %.2f", leftMotorSpeed,
+                        rightMotorSpeed, beaconPusherPosition);
+
+                // show the state of the current controls
+                telemetry.addData("Controller1", "lsx:%.2f lsy:%.2f lsb:%b",
+                        gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_button);
+                telemetry.addData("Controller1", "rsx:%.2f rsy:%.2f rsb:%b",
+                        gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_button);
+                telemetry.addData("Controller1", "lt:%.2f rt:%.2f lb:%.2b rb:%.2b",
+                        gamepad1.left_trigger, gamepad1.right_trigger, gamepad1.left_bumper,
+                        gamepad1.right_bumper);
+                telemetry.addData("Controller1", "dpad: l:%b r:%b u:%b d:%b", gamepad1.dpad_left,
+                        gamepad1.dpad_right, gamepad1.dpad_up, gamepad1.dpad_down);
+                telemetry.addData("Controller1", "x:%b y:%b a:%b b:%b", gamepad1.x, gamepad1.y,
+                        gamepad1.a, gamepad1.b);
+                telemetry.update();
+
+                // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
+                robot.waitForTick(40);
             }
-            if (rightSpeed > 0.01) {
-                right = -rightSpeed;
-            }
-            if (robot.frontLeftMotor != null) {
-                robot.frontLeftMotor.setPower(left);
-            }
-            else
-            {
-                telemetry.addData("motor left null", "%.2f", 1.0);
-            }
-            if (robot.frontRightMotor != null) {
-                robot.frontRightMotor.setPower(right);
-            }
-            else {
-                telemetry.addData("motor right null", "%.2f", 1.0);
-            }
-
-
-            // Use gamepad Y & A raise and lower the arm
-            /*if (gamepad1.a)
-                armPosition += ARM_SPEED;
-            else if (gamepad1.y)
-                armPosition -= ARM_SPEED;*/
-
-            // Use gamepad X & B to open and close the claw
-            if (gamepad1.x)
-                clawPosition += CLAW_SPEED;
-            else if (gamepad1.b)
-                clawPosition -= CLAW_SPEED;
-
-            // Move both servos to new position.
-            //armPosition  = Range.clip(armPosition, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE);
-            //robot.arm.setPosition(armPosition);
-            //clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
-            robot.claw.setPosition(clawPosition);
-
-            // Send telemetry message to signify robot running;
-            //telemetry.addData("arm",   "%.2f", armPosition);
-            telemetry.addData("claw",  "%.2f", clawPosition);
-            telemetry.addData("left",  "%.2f", left);
-            telemetry.addData("right", "%.2f", right);
-            telemetry.update();
-
-            // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
-            robot.waitForTick(40);
+        } catch (Exception e) {
+            telemetry.addData("Exception hit: ", e.getMessage());
         }
     }
 }

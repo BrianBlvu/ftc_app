@@ -14,8 +14,7 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
     }
     /* Declare OpMode members. */
     ChainDriveBot1 robot           = new ChainDriveBot1();              // Use a K9'shardware
-    double          armPosition     = robot.ARM_HOME;                   // Servo safe position
-    double          clawPosition    = robot.CLAW_HOME;                  // Servo safe position
+    double          clawPosition    = robot.BEACON_PUSHER_HOME;                  // Servo safe position
     final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
     final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
 
@@ -49,8 +48,8 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
             //move forward
             left = motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(moveForward2Milliseconds);
                 telemetry.addData("Say", "Forward");
@@ -64,8 +63,8 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
 
             left = -motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(turnRightMilliseconds);
                 telemetry.addData("Say", "Right");
@@ -79,8 +78,8 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
 
             left = motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(moveForward2Milliseconds);
                 telemetry.addData("Say", "Forward");
@@ -93,8 +92,8 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
             /*//turn right
             left = motorSpeed;
             right = -motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(turnRightMilliseconds);
                 telemetry.addData("Say", "Left");
@@ -108,8 +107,8 @@ public class SimpleStrategy_StartPosition1Blue extends LinearOpMode {
 
             left = motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(moveForward2Milliseconds);
                 telemetry.addData("Say", "Forward");

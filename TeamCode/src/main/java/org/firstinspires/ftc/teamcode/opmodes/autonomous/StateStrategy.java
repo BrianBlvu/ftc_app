@@ -43,7 +43,6 @@ import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.St
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.State.STARTED;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.State.STOP;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.State.STOPPED;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.State.TURN;
 
 /**
  * This OpMode uses the common HardwareK9bot class to define the devices on the robot.
@@ -52,11 +51,11 @@ import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.St
  *
  * This particular OpMode executes a basic Tank Drive Teleop for the K9 bot
  * It raises and lowers the arm using the Gampad Y and A buttons respectively.
- * It also opens and closes the claw slowly using the X and B buttons.
+ * It also opens and closes the beaconPusher slowly using the X and B buttons.
  *
  * Note: the configuration of the servos is such that
  * as the arm servo approaches 0, the arm position moves up (away from the floor).
- * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
+ * Also, as the beaconPusher servo approaches 0, the beaconPusher opens up (drops the game element).
  *
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -178,8 +177,8 @@ public class StateStrategy extends LinearOpMode {
         leftSpeed = 0;
         rightSpeed = 0;
 
-        robot.frontLeftMotor.setPower(leftSpeed);
-        robot.frontRightMotor.setPower(rightSpeed);
+        robot.leftMotor.setPower(leftSpeed);
+        robot.rightMotor.setPower(rightSpeed);
         currState = STOPPED;
     }
 
@@ -192,8 +191,8 @@ public class StateStrategy extends LinearOpMode {
         leftSpeed = .3;
         rightSpeed = .3;
 
-        robot.frontLeftMotor.setPower(leftSpeed);
-        robot.frontRightMotor.setPower(rightSpeed);
+        robot.leftMotor.setPower(leftSpeed);
+        robot.rightMotor.setPower(rightSpeed);
         currState = STARTED;
     }
 

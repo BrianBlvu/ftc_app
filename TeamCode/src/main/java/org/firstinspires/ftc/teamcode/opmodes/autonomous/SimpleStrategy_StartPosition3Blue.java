@@ -33,10 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 
@@ -47,11 +44,11 @@ import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
  *
  * This particular OpMode executes a basic Tank Drive Teleop for the K9 bot
  * It raises and lowers the arm using the Gampad Y and A buttons respectively.
- * It also opens and closes the claw slowly using the X and B buttons.
+ * It also opens and closes the beaconPusher slowly using the X and B buttons.
  *
  * Note: the configuration of the servos is such that
  * as the arm servo approaches 0, the arm position moves up (away from the floor).
- * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
+ * Also, as the beaconPusher servo approaches 0, the beaconPusher opens up (drops the game element).
  *
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -62,8 +59,7 @@ public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
 
     /* Declare OpMode members. */
     ChainDriveBot1   robot           = new ChainDriveBot1();              // Use a K9'shardware
-    double          armPosition     = robot.ARM_HOME;                   // Servo safe position
-    double          clawPosition    = robot.CLAW_HOME;                  // Servo safe position
+    double          clawPosition    = robot.BEACON_PUSHER_HOME;                  // Servo safe position
     final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
     final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
 
@@ -98,8 +94,8 @@ public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
             //move forward
             left = motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(moveForward2Milliseconds);
                 telemetry.addData("Say", "Forward");
@@ -113,8 +109,8 @@ public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
 
             left = motorSpeed;
             right = -motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(turnRightMilliseconds);
                 telemetry.addData("Say", "Right");
@@ -128,8 +124,8 @@ public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
 
             left = motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(moveForward2Milliseconds);
                 telemetry.addData("Say", "Forward");
@@ -142,8 +138,8 @@ public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
             /*/turn left
             left = -motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(turnRightMilliseconds);
                 telemetry.addData("Say", "Left");
@@ -157,8 +153,8 @@ public class SimpleStrategy_StartPosition3Blue extends LinearOpMode {
 
             left = motorSpeed;
             right = motorSpeed;
-            robot.frontLeftMotor.setPower(left);
-            robot.frontRightMotor.setPower(right);
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
             try {
                 robot.waitForTick(moveForward2Milliseconds);
                 telemetry.addData("Say", "Forward");

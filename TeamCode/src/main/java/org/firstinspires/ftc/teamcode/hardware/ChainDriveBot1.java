@@ -17,28 +17,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Motor channel:  Left  drive motor:        "left_drive"
  * Motor channel:  Right drive motor:        "right_drive"
  * Servo channel:  Servo to raise/lower arm: "arm"
- * Servo channel:  Servo to open/close claw: "claw"
+ * Servo channel:  Servo to open/close beaconPusher: "beaconPusher"
  *
  * Note: the configuration of the servos is such that:
  *   As the arm servo approaches 0, the arm position moves up (away from the floor).
- *   As the claw servo approaches 0, the claw opens up (drops the game element).
+ *   As the beaconPusher servo approaches 0, the beaconPusher opens up (drops the game element).
  */
 public class ChainDriveBot1
 {
     /* Public OpMode members. */
-    public DcMotor  frontLeftMotor   = null;
-    public DcMotor  frontRightMotor  = null;
-    public DcMotor  backLeftMotor   = null;
-    public DcMotor  backRightMotor  = null;
-    public Servo    arm         = null;
-    public Servo    claw        = null;
+    public DcMotor leftMotor = null;
+    public DcMotor rightMotor = null;
+    public Servo beaconPusher = null;
 
-    public final static double ARM_HOME = 0.2;
-    public final static double CLAW_HOME = 0.2;
-    public final static double ARM_MIN_RANGE  = 0.20;
-    public final static double ARM_MAX_RANGE  = 0.90;
-    public final static double CLAW_MIN_RANGE  = 0.20;
-    public final static double CLAW_MAX_RANGE  = 0.7;
+    public final static double BEACON_PUSHER_HOME = 0.45; // defines middle position for servo
+    public final static double BEACON_PUSHER_SPEED = 0.01; // sets rate to move servo
+    public final static double BEACON_PUSHER_MIN_RANGE  = 0.33; // sets furthest left for servo
+    public final static double BEACON_PUSHER_MAX_RANGE = 0.65; // sets furthest right for servo
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -53,38 +48,24 @@ public class ChainDriveBot1
         // save reference to HW Map
         hwMap = ahwMap;
 
-        // Define and Initialize Motors
-        try {
-            frontLeftMotor = hwMap.dcMotor.get("left_drive");
-            frontRightMotor = hwMap.dcMotor.get("right_drive");
-            frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        // Define and Initialize Moto
+            leftMotor = hwMap.dcMotor.get("left_drive");
+            rightMotor = hwMap.dcMotor.get("right_drive");
+            leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
             // Set all motors to zero power
-            frontLeftMotor.setPower(0);
-            frontRightMotor.setPower(0);
+            leftMotor.setPower(0);
+            rightMotor.setPower(0);
 
             // Set all motors to run without encoders.
             // May want to use RUN_USING_ENCODERS if encoders are installed.
-            frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        catch(Exception e)
-        {
+            leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        // Define and initialize ALL installed servos
+            beaconPusher = hwMap.servo.get("beacon_pusher");
+            beaconPusher.setPosition(BEACON_PUSHER_HOME);
         }
-
-        // Define and initialize ALL installed servos.
-        try{
-            //arm = hwMap.servo.get("arm");
-            claw = hwMap.servo.get("beacon_pusher");
-            //arm.setPosition(ARM_HOME);
-            claw.setPosition(CLAW_HOME);
-        }
-        catch(Exception e)
-        {
-
-        }
-    }
 
     /***
      *
