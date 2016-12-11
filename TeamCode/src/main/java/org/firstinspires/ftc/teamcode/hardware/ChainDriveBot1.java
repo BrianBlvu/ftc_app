@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
@@ -79,6 +80,11 @@ public class ChainDriveBot1
         colorDown = hardwareMap.colorSensor.get("color_down");
         colorFrontLeft = hardwareMap.colorSensor.get("color_front_left");
         colorFrontRight = hardwareMap.colorSensor.get("color_front_right");
+
+        // Each color sensor needs a unique I2C address
+        colorDown.setI2cAddress(I2cAddr.create8bit(0x40));
+        colorFrontLeft.setI2cAddress(I2cAddr.create8bit(0x3e));
+        colorFrontRight.setI2cAddress(I2cAddr.create8bit(0x3c));
 
         colorDown.enableLed(false);
         colorFrontLeft.enableLed(false);
