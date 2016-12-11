@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
  * Created by Thomas on 11/19/2016.
  */
 
-
+@Disabled
 @Autonomous(name="AutonomousMode2", group="Autonomous")
 public class SimpleStrategy_StartPosition2 extends LinearOpMode {
     /* Declare OpMode members. */

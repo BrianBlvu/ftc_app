@@ -55,8 +55,8 @@ public class DriverMode1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        double leftMotorSpeed;
-        double rightMotorSpeed;
+        double leftMotorPower;
+        double rightMotorPower;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -67,6 +67,18 @@ public class DriverMode1 extends LinearOpMode {
         {
             telemetry.addData("Failed to Initialize Robot: ",  e.getMessage());
         }
+
+        // We'll toggle the color sensor LEDs on and off with the Y button
+        // wasYAlreadyPressed and isYPressed represent the previous and current state of the y button.
+        boolean wasYAlreadyPressed = false;
+        boolean isYPressed = false;
+
+        boolean isLedOn = true;
+
+        // Set the color sensor LEDs on in the beginning
+        robot.colorDown.enableLed(true);
+        robot.colorFrontLeft.enableLed(true);
+        robot.colorFrontRight.enableLed(true);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("DriverMode1", "Initialized");
@@ -80,22 +92,34 @@ public class DriverMode1 extends LinearOpMode {
         try{
             // run until the end of the match (driver presses STOP)
             while (opModeIsActive()) {
-                leftMotorSpeed = gamepad1.left_stick_y;
-                rightMotorSpeed = gamepad1.right_stick_y;
+                leftMotorPower = gamepad1.left_stick_y;
+                rightMotorPower = gamepad1.right_stick_y;
+                isYPressed = gamepad1.y;
+
+                // check for button state transitions.
+                if (isYPressed && !wasYAlreadyPressed) {
+                    // button is transitioning to a pressed state. So Toggle LED
+                    isLedOn = !isLedOn;
+                    robot.colorDown.enableLed(isLedOn);
+                    robot.colorFrontLeft.enableLed(isLedOn);
+                    robot.colorFrontRight.enableLed(isLedOn);
+                }
+
+                wasYAlreadyPressed = isYPressed;
 
                 // If either trigger is pulled more than a little bit, cut the robot's speed 10x
                 if (gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1) {
-                    leftMotorSpeed = leftMotorSpeed / 10;
-                    rightMotorSpeed = rightMotorSpeed / 10;
+                    leftMotorPower = leftMotorPower / 10;
+                    rightMotorPower = rightMotorPower / 10;
                 }
 
                 if (robot.leftMotor != null) {
-                    robot.leftMotor.setPower(leftMotorSpeed);
+                    robot.leftMotor.setPower(leftMotorPower);
                 } else {
                     telemetry.addData("left motor not installed", "");
                 }
                 if (robot.rightMotor != null) {
-                    robot.rightMotor.setPower(rightMotorSpeed);
+                    robot.rightMotor.setPower(rightMotorPower);
                 } else {
                     telemetry.addData("right motor not installed", "");
                 }
@@ -116,23 +140,7 @@ public class DriverMode1 extends LinearOpMode {
                     telemetry.addData("No beaconPusher installed", "");
                 }
 
-                // show the values we're currently feeding the motors
-                telemetry.addData("Controls", "left: %.2f, right: %.2f, beaconPusher: %.2f", leftMotorSpeed,
-                        rightMotorSpeed, beaconPusherPosition);
-
-                // show the state of the current controls
-                telemetry.addData("Controller1", "lsx:%.2f lsy:%.2f lsb:%b",
-                        gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_button);
-                telemetry.addData("Controller1", "rsx:%.2f rsy:%.2f rsb:%b",
-                        gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_button);
-                telemetry.addData("Controller1", "lt:%.2f rt:%.2f lb:%.2b rb:%.2b",
-                        gamepad1.left_trigger, gamepad1.right_trigger, gamepad1.left_bumper,
-                        gamepad1.right_bumper);
-                telemetry.addData("Controller1", "dpad: l:%b r:%b u:%b d:%b", gamepad1.dpad_left,
-                        gamepad1.dpad_right, gamepad1.dpad_up, gamepad1.dpad_down);
-                telemetry.addData("Controller1", "x:%b y:%b a:%b b:%b", gamepad1.x, gamepad1.y,
-                        gamepad1.a, gamepad1.b);
-                telemetry.update();
+                printStatusToTelemetry();
 
                 // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
                 robot.waitForTick(40);
@@ -140,5 +148,31 @@ public class DriverMode1 extends LinearOpMode {
         } catch (Exception e) {
             telemetry.addData("Exception hit: ", e.getMessage());
         }
+    }
+
+    private void printStatusToTelemetry() {
+        // show the values we're currently feeding the motors
+        telemetry.addData("Controls", "left: %.2f, right: %.2f, beaconPusher: %.2f",
+                robot.leftMotor.getPower(), robot.rightMotor.getPower(), beaconPusherPosition);
+
+        telemetry.addData("Color RGB", "down:%d/%d/%d, left:%d/%d/%d, right%d/%d/%d",
+                robot.colorDown.red(), robot.colorDown.green(), robot.colorDown.blue(),
+                robot.colorFrontLeft.red(), robot.colorFrontLeft.green(), robot.colorFrontLeft.blue(),
+                robot.colorFrontRight.red(), robot.colorFrontRight.green(), robot.colorFrontRight.blue());
+        telemetry.addData("Distance to beacon", robot.beaconDistance);
+
+        // show the state of the current controls
+        telemetry.addData("Controller1", "lsx:%.2f lsy:%.2f lsb:%b",
+                gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_button);
+        telemetry.addData("Controller1", "rsx:%.2f rsy:%.2f rsb:%b",
+                gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_button);
+        telemetry.addData("Controller1", "lt:%.2f rt:%.2f lb:%.2b rb:%.2b",
+                gamepad1.left_trigger, gamepad1.right_trigger, gamepad1.left_bumper,
+                gamepad1.right_bumper);
+        telemetry.addData("Controller1", "dpad: l:%b r:%b u:%b d:%b", gamepad1.dpad_left,
+                gamepad1.dpad_right, gamepad1.dpad_up, gamepad1.dpad_down);
+        telemetry.addData("Controller1", "x:%b y:%b a:%b b:%b", gamepad1.x, gamepad1.y,
+                gamepad1.a, gamepad1.b);
+        telemetry.update();
     }
 }

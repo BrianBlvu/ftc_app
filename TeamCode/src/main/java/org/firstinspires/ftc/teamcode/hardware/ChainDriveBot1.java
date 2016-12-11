@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -30,13 +34,18 @@ public class ChainDriveBot1
     public DcMotor rightMotor = null;
     public Servo beaconPusher = null;
 
+    public ColorSensor colorDown = null;
+    public ColorSensor colorFrontLeft = null;
+    public ColorSensor colorFrontRight = null;
+    public OpticalDistanceSensor beaconDistance = null;
+
     public final static double BEACON_PUSHER_HOME = 0.45; // defines middle position for servo
     public final static double BEACON_PUSHER_SPEED = 0.01; // sets rate to move servo
     public final static double BEACON_PUSHER_MIN_RANGE  = 0.33; // sets furthest left for servo
     public final static double BEACON_PUSHER_MAX_RANGE = 0.65; // sets furthest right for servo
 
     /* Local OpMode members. */
-    HardwareMap hwMap  = null;
+    HardwareMap hardwareMap = null;
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
@@ -46,26 +55,37 @@ public class ChainDriveBot1
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // save reference to HW Map
-        hwMap = ahwMap;
+        hardwareMap = ahwMap;
 
-        // Define and Initialize Moto
-            leftMotor = hwMap.dcMotor.get("left_drive");
-            rightMotor = hwMap.dcMotor.get("right_drive");
-            leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftMotor = hardwareMap.dcMotor.get("left_drive");
+        rightMotor = hardwareMap.dcMotor.get("right_drive");
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
-            // Set all motors to zero power
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
+        // Set all motors to zero power
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
 
-            // Set all motors to run without encoders.
-            // May want to use RUN_USING_ENCODERS if encoders are installed.
-            leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // Set all motors to run without encoders.
+        // Our motor encoders aren't plugged in, so we should stick with RUN_WITHOUT_ENCODERS.
+        // If we install our motor encoders and update our code to make use of them, we can
+        // switch to RUN_WITH_ENCODERS.
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize ALL installed servos
-            beaconPusher = hwMap.servo.get("beacon_pusher");
-            beaconPusher.setPosition(BEACON_PUSHER_HOME);
-        }
+        beaconPusher = hardwareMap.servo.get("beacon_pusher");
+        beaconPusher.setPosition(BEACON_PUSHER_HOME);
+
+        colorDown = hardwareMap.colorSensor.get("color_down");
+        colorFrontLeft = hardwareMap.colorSensor.get("color_front_left");
+        colorFrontRight = hardwareMap.colorSensor.get("color_front_right");
+
+        colorDown.enableLed(false);
+        colorFrontLeft.enableLed(false);
+        colorFrontRight.enableLed(false);
+
+        beaconDistance = hardwareMap.opticalDistanceSensor.get("beacon_distance");
+    }
 
     /***
      *
