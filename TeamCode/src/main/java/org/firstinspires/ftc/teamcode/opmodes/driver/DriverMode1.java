@@ -50,7 +50,7 @@ import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 @TeleOp(name="DriverMode1", group="driver")
 public class DriverMode1 extends LinearOpMode {
 
-    private ChainDriveBot1 robot = new ChainDriveBot1();
+    private ChainDriveBot1 robot = new ChainDriveBot1(telemetry);
     private double beaconPusherPosition = ChainDriveBot1.BEACON_PUSHER_HOME; // Servo safe position
 
     @Override
@@ -76,10 +76,13 @@ public class DriverMode1 extends LinearOpMode {
         boolean isLedOn = true;
 
         // Set the color sensor LEDs on in the beginning
-        robot.colorDown.enableLed(true);
-        robot.colorFrontLeft.enableLed(true);
-        robot.colorFrontRight.enableLed(true);
-
+        if (robot.colorDown != null && robot.colorFrontLeft != null && robot.colorFrontRight != null) {
+            robot.colorDown.enableLed(true);
+            robot.colorFrontLeft.enableLed(true);
+            robot.colorFrontRight.enableLed(true);
+        } else {
+            telemetry.addData("One of the sensors is missing", "");
+        }
         // Send telemetry message to signify robot waiting;
         telemetry.addData("DriverMode1", "Initialized");
         telemetry.update();
@@ -100,9 +103,11 @@ public class DriverMode1 extends LinearOpMode {
                 if (isYPressed && !wasYAlreadyPressed) {
                     // button is transitioning to a pressed state. So Toggle LED
                     isLedOn = !isLedOn;
-                    robot.colorDown.enableLed(isLedOn);
-                    robot.colorFrontLeft.enableLed(isLedOn);
-                    robot.colorFrontRight.enableLed(isLedOn);
+                    if (null != robot.colorDown && null != robot.colorFrontLeft && null != robot.colorFrontRight) {
+                        robot.colorDown.enableLed(isLedOn);
+                        robot.colorFrontLeft.enableLed(isLedOn);
+                        robot.colorFrontRight.enableLed(isLedOn);
+                    }
                 }
 
                 wasYAlreadyPressed = isYPressed;
@@ -154,11 +159,17 @@ public class DriverMode1 extends LinearOpMode {
         // show the values we're currently feeding the motors
         telemetry.addData("Controls", "left: %.2f, right: %.2f, beaconPusher: %.2f",
                 robot.leftMotor.getPower(), robot.rightMotor.getPower(), beaconPusherPosition);
+        if (null != robot.colorFrontLeft && null != robot.colorFrontRight){
+
 
         telemetry.addData("Color RGB", "down:%d/%d/%d, left:%d/%d/%d, right%d/%d/%d",
                 robot.colorDown.red(), robot.colorDown.green(), robot.colorDown.blue(),
                 robot.colorFrontLeft.red(), robot.colorFrontLeft.green(), robot.colorFrontLeft.blue(),
                 robot.colorFrontRight.red(), robot.colorFrontRight.green(), robot.colorFrontRight.blue());
+        } else {
+            telemetry.addData("One of the two sensors is not missing", "");
+        }
+
         telemetry.addData("Distance to beacon", robot.beaconDistance);
 
         // show the state of the current controls

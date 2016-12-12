@@ -78,7 +78,7 @@ public class StateStrategy extends LinearOpMode {
         WHITE
     }
 
-    ChainDriveBot1 robot = new ChainDriveBot1();
+    ChainDriveBot1 robot = new ChainDriveBot1(telemetry);
     ColorSensor colorSensorBottom;
     ColorSensor colorSensorLeft;
     ColorSensor colorSensorRight;

@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**
  * This is NOT an opmode.
  *
@@ -46,11 +48,13 @@ public class ChainDriveBot1
     public final static double BEACON_PUSHER_MAX_RANGE = 0.65; // sets furthest right for servo
 
     /* Local OpMode members. */
-    HardwareMap hardwareMap = null;
+    private HardwareMap hardwareMap = null;
     private ElapsedTime period  = new ElapsedTime();
+    private Telemetry telemetry;
 
     /* Constructor */
-    public ChainDriveBot1() {
+    public ChainDriveBot1(Telemetry aTelemetry) {
+        telemetry = aTelemetry;
     }
 
     /* Initialize standard Hardware interfaces */
@@ -82,13 +86,25 @@ public class ChainDriveBot1
         colorFrontRight = hardwareMap.colorSensor.get("color_front_right");
 
         // Each color sensor needs a unique I2C address
-        colorDown.setI2cAddress(I2cAddr.create8bit(0x40));
-        colorFrontLeft.setI2cAddress(I2cAddr.create8bit(0x3e));
-        colorFrontRight.setI2cAddress(I2cAddr.create8bit(0x3c));
+        if (null != colorDown) {
+            colorDown.setI2cAddress(I2cAddr.create8bit(0x40));
+            colorDown.enableLed(false);
+        } else {
+            telemetry.addData("ChainDriveBot1.init()", "color_down sensor not found");
+        }
 
-        colorDown.enableLed(false);
-        colorFrontLeft.enableLed(false);
-        colorFrontRight.enableLed(false);
+        if (null != colorFrontLeft) {
+            colorFrontLeft.setI2cAddress(I2cAddr.create8bit(0x3e));
+            colorFrontLeft.enableLed(false);
+        } else {
+            telemetry.addData("ChainDriveBot1.Init()", "color_front_left sensor not found");
+        }
+        if (null != colorFrontRight) {
+            colorFrontRight.setI2cAddress(I2cAddr.create8bit(0x3c));
+            colorFrontRight.enableLed(false);
+        } else {
+            telemetry.addData("ChainDriveBot1.init()", "color_front_right sensor not found");
+        }
 
         beaconDistance = hardwareMap.opticalDistanceSensor.get("beacon_distance");
     }

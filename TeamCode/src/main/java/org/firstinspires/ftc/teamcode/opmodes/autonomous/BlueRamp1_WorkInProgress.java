@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 @Autonomous(name="BlueRamp1_WorkInProgress", group="Autonomous")
 public class BlueRamp1_WorkInProgress extends LinearOpMode {
     /* Declare OpMode members. */
-    ChainDriveBot1 robot           = new ChainDriveBot1();              // Use a K9'shardware
+    ChainDriveBot1 robot           = new ChainDriveBot1(telemetry);              // Use a K9'shardware
     double          clawPosition    = robot.BEACON_PUSHER_HOME;                  // Servo safe position
     final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
     final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
