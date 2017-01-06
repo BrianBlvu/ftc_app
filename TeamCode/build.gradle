@@ -13,6 +13,13 @@ apply from: '../build.common.gradle'
 android {
     compileSdkVersion 23
     buildToolsVersion '25'
+    }
+
+repositories {
+    flatDir {
+        dirs 'libs', 'C:\\Users\\Thomas\\navx-micro\\android\\libs'
+    }
 }
 dependencies {
+    compile (name:'navx_ftc-release', ext:'aar')
 }
