@@ -15,4 +15,6 @@ android {
     buildToolsVersion '25'
 }
 dependencies {
+    compile project(':FtcRobotController')
+    compile project(':navx_ftc-release')
 }

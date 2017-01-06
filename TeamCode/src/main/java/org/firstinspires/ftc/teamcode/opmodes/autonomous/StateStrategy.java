@@ -63,7 +63,7 @@ import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateStrategy.St
 
 @Autonomous(name="StateStrategy", group="Autonomous")
 public class StateStrategy extends LinearOpMode {
-    public enum State {
+    enum State {
         STOP,
         STOPPED,
         START,
@@ -72,7 +72,7 @@ public class StateStrategy extends LinearOpMode {
         PRESS
     }
 
-    public enum Color {
+    enum Color {
         BLUE,
         RED,
         WHITE
@@ -83,7 +83,7 @@ public class StateStrategy extends LinearOpMode {
     ColorSensor colorSensorLeft;
     ColorSensor colorSensorRight;
 
-    private State currState = START;
+    private State currentState = START;
     private Color currColor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -105,10 +105,11 @@ public class StateStrategy extends LinearOpMode {
         robot.init(hardwareMap);
 
         colorSensorBottom = hardwareMap.colorSensor.get("sensor_color");
-        //colorSensorLeft = hardwareMap.colorSensor.get("sensor_color");
-        //colorSensorRight = hardwareMap.colorSensor.get("sensor_color");
+        colorSensorLeft = hardwareMap.colorSensor.get("sensor_color");
+        colorSensorRight = hardwareMap.colorSensor.get("sensor_color");
+
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "Ready to Start");    //
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -117,38 +118,50 @@ public class StateStrategy extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            telemetry.addData("Red  ", colorSensorBottom.red());
-            telemetry.addData("Green", colorSensorBottom.green());
-            telemetry.addData("Blue ", colorSensorBottom.blue());
-            telemetry.addData("Time: ", runtime.milliseconds());
-            telemetry.update();
+            sendSensorTelemetry();
+
+            // Use gyro to turn right 45 degree so the robot is pointed at the white line of the first beacon
+
+            // Roll forward until detecting the line, using the gyro to roll straight
+
+            // Follow the white line until within pushing range of the button
+
+            // Detect color until we see the right alliance color on one side
+
+            // Push the correct side until color changes or too much time elapsed
+            // if too much time elapsed, back up and try again
+
+            // if the color changed, turn and go press the next beacon
+
+
+
 
             if (colorSensorBottom.red() > 200 && colorSensorBottom.green() > 200 && colorSensorBottom.blue() > 200)
             {
                 telemetry.addData("Say", "FOUND WHITE LINE");
                 telemetry.addData("Time: ", runtime.milliseconds());
                 telemetry.update();
-                currState = STOP;
+                currentState = STOP;
             }
 
-            if (currState == STARTED && stateTimer.seconds() > ELAPSED_TIME_STATE_SWITCH)
+            if (currentState == STARTED && stateTimer.seconds() > ELAPSED_TIME_STATE_SWITCH)
             {
                 telemetry.addData("Say", "STOPPING");
                 telemetry.addData("Time: ", runtime.milliseconds());
                 telemetry.update();
-                currState = STOP;
+                currentState = STOP;
                 stateTimer.reset();
             }
 
-            if (currState == STOPPED && stateTimer.seconds() > ELAPSED_TIME_STATE_SWITCH)
+            if (currentState == STOPPED && stateTimer.seconds() > ELAPSED_TIME_STATE_SWITCH)
             {
-                telemetry.addData("Say", "STARTING");
+                telemetry.addData("Say", "STARTING_DELAY");
                 telemetry.addData("Time: ", runtime.milliseconds());
                 telemetry.update();
-                currState = START;
+                currentState = START;
                 stateTimer.reset();
             }
-            switch(currState) {
+            switch(currentState) {
                 case STOP:
                     stopMotors();
                     break;
@@ -168,6 +181,14 @@ public class StateStrategy extends LinearOpMode {
         }
     }
 
+    private void sendSensorTelemetry() {
+        telemetry.addData("Red  ", colorSensorBottom.red());
+        telemetry.addData("Green", colorSensorBottom.green());
+        telemetry.addData("Blue ", colorSensorBottom.blue());
+        telemetry.addData("Time: ", runtime.milliseconds());
+        telemetry.update();
+    }
+
     public void stopMotors()
     {
         telemetry.addData("Say", "STOP MOTORS");
@@ -179,7 +200,7 @@ public class StateStrategy extends LinearOpMode {
 
         robot.leftMotor.setPower(leftSpeed);
         robot.rightMotor.setPower(rightSpeed);
-        currState = STOPPED;
+        currentState = STOPPED;
     }
 
     public void startMotors()
@@ -193,7 +214,7 @@ public class StateStrategy extends LinearOpMode {
 
         robot.leftMotor.setPower(leftSpeed);
         robot.rightMotor.setPower(rightSpeed);
-        currState = STARTED;
+        currentState = STARTED;
     }
 
     public void turn(String direction)

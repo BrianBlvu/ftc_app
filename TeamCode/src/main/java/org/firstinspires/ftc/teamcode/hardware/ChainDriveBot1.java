@@ -46,6 +46,8 @@ public class ChainDriveBot1
     public final static double BEACON_PUSHER_SPEED = 0.01; // sets rate to move servo
     public final static double BEACON_PUSHER_MIN_RANGE  = 0.33; // sets furthest left for servo
     public final static double BEACON_PUSHER_MAX_RANGE = 0.65; // sets furthest right for servo
+    public final static double BEACON_PUSHER_LEFT_PUSHING_POSITION  = 0.30;
+    public final static double BEACON_PUSHER_RIGHT_PUSHING_POSITION = 0.62;
 
     /* Local OpMode members. */
     private HardwareMap hardwareMap = null;
