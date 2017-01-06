@@ -102,7 +102,7 @@ public class ChainDriveBot1
             telemetry.addData("ChainDriveBot1.Init()", "color_front_left sensor not found");
         }
         if (null != colorFrontRight) {
-            colorFrontRight.setI2cAddress(I2cAddr.create8bit(0x3c));
+            colorFrontRight.setI2cAddress(I2cAddr.create8bit(0x4c));
             colorFrontRight.enableLed(false);
         } else {
             telemetry.addData("ChainDriveBot1.init()", "color_front_right sensor not found");
