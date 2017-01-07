@@ -119,11 +119,8 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     private final int DEVICE_TIMEOUT_MS = 500;
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-    private final int RED_EDGE_VALUE = 100; // TODO: Calibrate red edge value with testing
-    private final int GREEN_EDGE_VALUE = 100; // TODO: Calibrate green edge value with testing
-    private final int BLUE_EDGE_VALUE = 100; // TODO: Calibrate blue edge value with testing
     private final double BEACON_DISTANCE_THRESHOLD = 0.5; // TODO: Calibrate beacon distance threshold with testing
-    private final int LINE_FOLLOWING_THRESHOLD_VALUE = 100; // TODO : Calibrate color threshold
+    private final int LINE_FOLLOWING_THRESHOLD_VALUE = 5;
 
     // TODO: feed in the actual alliance name
     private Color alliance = Color.BLUE;
@@ -233,7 +230,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         // TODO: Implement https://ftc-tricks.com/proportional-line-follower/
         // For now, just drive straight
         double color;
-        color = robot.colorDown.argb();
+        color = robot.colorDown.red();
         if (color > LINE_FOLLOWING_THRESHOLD_VALUE) {
             robot.leftMotor.setPower(0.5);
             robot.rightMotor.setPower(0.0);
@@ -296,9 +293,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     private boolean isOnBeaconLineEdge() {
-        return robot.colorDown.red() > RED_EDGE_VALUE
-                && robot.colorDown.green() > GREEN_EDGE_VALUE
-                && robot.colorDown.blue() > BLUE_EDGE_VALUE;
+        return robot.colorDown.green() > LINE_FOLLOWING_THRESHOLD_VALUE;
     }
 
     private void turnUntilAtTargetAngle() {
@@ -362,7 +357,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     private void initializeNavigationController(){
-        navXDevice = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get("dim"),
+        navXDevice = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get("nav"),
                 NAVX_DIM_I2C_PORT,
                 AHRS.DeviceDataType.kProcessedData,
                 NAVX_DEVICE_UPDATE_RATE_HZ);
