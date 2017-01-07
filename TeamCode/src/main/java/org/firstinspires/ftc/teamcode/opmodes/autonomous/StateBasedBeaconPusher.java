@@ -135,6 +135,9 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         robot.init(hardwareMap);
 
         initializeNavigationController();
+        robot.colorDown.enableLed(true);
+        robot.colorFrontLeft.enableLed(false);
+        robot.colorFrontRight.enableLed(false);
         changeState(READY_TO_START);
 
         // Send telemetry message to signify robot waiting;
