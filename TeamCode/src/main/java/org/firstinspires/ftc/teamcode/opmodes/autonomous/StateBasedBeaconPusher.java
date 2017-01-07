@@ -126,6 +126,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     private final int GREEN_EDGE_VALUE = 100; // TODO: Calibrate green edge value with testing
     private final int BLUE_EDGE_VALUE = 100; // TODO: Calibrate blue edge value with testing
     private final double BEACON_DISTANCE_THRESHOLD = 0.5; // TODO: Calibrate beacon distance threshold with testing
+    private final int LINE_FOLLOWING_THRESHOLD_VALUE = 100; // TODO : Calibrate color threshold
 
     // TODO: feed in the actual alliance name
     private Color alliance = Color.BLUE;
@@ -242,8 +243,15 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     private void driveAlongLineEdge() {
         // TODO: Implement https://ftc-tricks.com/proportional-line-follower/
         // For now, just drive straight
-        robot.leftMotor.setPower(0.5);
-        robot.rightMotor.setPower(0.5);
+        double color;
+        color = robot.colorDown.argb();
+        if (color > LINE_FOLLOWING_THRESHOLD_VALUE) {
+            robot.leftMotor.setPower(0.5);
+            robot.rightMotor.setPower(0.0);
+        } else if (color < LINE_FOLLOWING_THRESHOLD_VALUE) {
+            robot.rightMotor.setPower(0.5);
+            robot.leftMotor.setPower(0.0);
+        }
     }
 
     private boolean isCloseEnoughToBeacon() {
