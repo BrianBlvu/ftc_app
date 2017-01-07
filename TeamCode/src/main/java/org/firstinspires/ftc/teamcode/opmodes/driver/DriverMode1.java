@@ -145,7 +145,7 @@ public class DriverMode1 extends LinearOpMode {
                     telemetry.addData("No beaconPusher installed", "");
                 }
 
-                printStatusToTelemetry();
+                robot.printStatusToTelemetry(this);
 
                 // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
                 robot.waitForTick(40);
@@ -155,35 +155,4 @@ public class DriverMode1 extends LinearOpMode {
         }
     }
 
-    private void printStatusToTelemetry() {
-        // show the values we're currently feeding the motors
-        telemetry.addData("Controls", "left: %.2f, right: %.2f, beaconPusher: %.2f",
-                robot.leftMotor.getPower(), robot.rightMotor.getPower(), beaconPusherPosition);
-        if (null != robot.colorFrontLeft && null != robot.colorFrontRight){
-
-
-        telemetry.addData("Color RGB", "down:%d/%d/%d, left:%d/%d/%d, right%d/%d/%d",
-                robot.colorDown.red(), robot.colorDown.green(), robot.colorDown.blue(),
-                robot.colorFrontLeft.red(), robot.colorFrontLeft.green(), robot.colorFrontLeft.blue(),
-                robot.colorFrontRight.red(), robot.colorFrontRight.green(), robot.colorFrontRight.blue());
-        } else {
-            telemetry.addData("One of the two sensors is not missing", "");
-        }
-
-        telemetry.addData("Distance to beacon", robot.beaconDistance);
-
-        // show the state of the current controls
-        telemetry.addData("Controller1", "lsx:%.2f lsy:%.2f lsb:%b",
-                gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_stick_button);
-        telemetry.addData("Controller1", "rsx:%.2f rsy:%.2f rsb:%b",
-                gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_button);
-        telemetry.addData("Controller1", "lt:%.2f rt:%.2f lb:%.2b rb:%.2b",
-                gamepad1.left_trigger, gamepad1.right_trigger, gamepad1.left_bumper,
-                gamepad1.right_bumper);
-        telemetry.addData("Controller1", "dpad: l:%b r:%b u:%b d:%b", gamepad1.dpad_left,
-                gamepad1.dpad_right, gamepad1.dpad_up, gamepad1.dpad_down);
-        telemetry.addData("Controller1", "x:%b y:%b a:%b b:%b", gamepad1.x, gamepad1.y,
-                gamepad1.a, gamepad1.b);
-        telemetry.update();
-    }
 }

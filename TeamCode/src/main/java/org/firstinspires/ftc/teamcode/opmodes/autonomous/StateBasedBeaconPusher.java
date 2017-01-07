@@ -90,9 +90,6 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     ChainDriveBot1 robot = new ChainDriveBot1(telemetry);
-    ColorSensor colorSensorBottom;
-    ColorSensor colorSensorLeft;
-    ColorSensor colorSensorRight;
 
     private State currentState = STOPPED;
     private ElapsedTime runtime = new ElapsedTime();
@@ -140,9 +137,6 @@ public class StateBasedBeaconPusher extends LinearOpMode {
          */
         robot.init(hardwareMap);
 
-        colorSensorBottom = hardwareMap.colorSensor.get("sensor_color");
-        colorSensorLeft = hardwareMap.colorSensor.get("sensor_color");
-        colorSensorRight = hardwareMap.colorSensor.get("sensor_color");
         initializeNavigationController();
         changeState(READY_TO_START);
 
@@ -156,19 +150,14 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         Button buttonToPush = LEFT;
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            sendSensorTelemetry();
-
+            robot.printStatusToTelemetry(this);
+            // Here's our strategy:
             // Use gyro to turn right 45 degree so the robot is pointed at the white line of the first beacon
-
             // Roll forward until detecting the line, using the gyro to roll straight
-
             // Follow the white line until within pushing range of the button
-
             // Detect color until we see the right alliance color on one side
-
             // Push the correct side until color changes or too much time elapsed
             // if too much time elapsed, back up and try again
-
             // if the color changed, turn and go press the next beacon
 
             switch (currentState)
@@ -307,9 +296,9 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     private boolean isOnBeaconLineEdge() {
-        return colorSensorBottom.red() > RED_EDGE_VALUE
-                && colorSensorBottom.green() > GREEN_EDGE_VALUE
-                && colorSensorBottom.blue() > BLUE_EDGE_VALUE;
+        return robot.colorDown.red() > RED_EDGE_VALUE
+                && robot.colorDown.green() > GREEN_EDGE_VALUE
+                && robot.colorDown.blue() > BLUE_EDGE_VALUE;
     }
 
     private void turnUntilAtTargetAngle() {
@@ -398,13 +387,5 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     private void changeState(State newState) {
         telemetry.addData("Changing State", "Old: " + currentState + "New: " + newState);
         currentState = newState;
-    }
-
-    private void sendSensorTelemetry() {
-        telemetry.addData("Red  ", colorSensorBottom.red());
-        telemetry.addData("Green", colorSensorBottom.green());
-        telemetry.addData("Blue ", colorSensorBottom.blue());
-        telemetry.addData("Time: ", runtime.milliseconds());
-        telemetry.update();
     }
 }

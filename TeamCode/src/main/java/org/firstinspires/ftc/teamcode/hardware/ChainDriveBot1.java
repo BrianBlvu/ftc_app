@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -134,5 +135,35 @@ public class ChainDriveBot1
 
         // Reset the cycle clock for the next pass.
         period.reset();
+    }
+
+    public void printStatusToTelemetry(OpMode opMode) {
+        // show the values we're currently feeding the motors
+        opMode.telemetry.addData("Controls", "leftMotor: %.2f, rightMotor: %.2f, beaconPusherServo: %.2f",
+                leftMotor.getPower(), rightMotor.getPower(), beaconPusher.getPosition());
+        if (null != colorFrontLeft && null != colorFrontRight && null != colorDown){
+            opMode.telemetry.addData("Color RGB", "down:%d/%d/%d, left:%d/%d/%d, right%d/%d/%d",
+                    colorDown.red(), colorDown.green(), colorDown.blue(),
+                    colorFrontLeft.red(), colorFrontLeft.green(), colorFrontLeft.blue(),
+                    colorFrontRight.red(), colorFrontRight.green(), colorFrontRight.blue());
+        } else {
+            opMode.telemetry.addData("One of the three sensors is missing", "");
+        }
+
+        opMode.telemetry.addData("OpticalDistanceSensor", beaconDistance);
+
+        // show the state of the current controls
+        opMode.telemetry.addData("Controller1", "lsx:%.2f lsy:%.2f lsb:%b",
+                opMode.gamepad1.left_stick_x, opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_button);
+        opMode.telemetry.addData("Controller1", "rsx:%.2f rsy:%.2f rsb:%b",
+                opMode.gamepad1.right_stick_x, opMode.gamepad1.right_stick_y, opMode.gamepad1.right_stick_button);
+        opMode.telemetry.addData("Controller1", "lt:%.2f rt:%.2f lb:%.2b rb:%.2b",
+                opMode.gamepad1.left_trigger, opMode.gamepad1.right_trigger, opMode.gamepad1.left_bumper,
+                opMode.gamepad1.right_bumper);
+        opMode.telemetry.addData("Controller1", "dpad: l:%b r:%b u:%b d:%b", opMode.gamepad1.dpad_left,
+                opMode.gamepad1.dpad_right, opMode.gamepad1.dpad_up, opMode.gamepad1.dpad_down);
+        opMode.telemetry.addData("Controller1", "x:%b y:%b a:%b b:%b", opMode.gamepad1.x, opMode.gamepad1.y,
+                opMode.gamepad1.a, opMode.gamepad1.b);
+        opMode.telemetry.update();
     }
 }
