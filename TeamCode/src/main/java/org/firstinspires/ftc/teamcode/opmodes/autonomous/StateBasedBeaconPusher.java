@@ -40,6 +40,7 @@ import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -312,8 +313,8 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                     !Thread.currentThread().isInterrupted()) {
                 if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {
                     if (yawPIDResult.isOnTarget()) {
-                        robot.leftMotor.setPowerFloat();
-                        robot.rightMotor.setPowerFloat();
+                        robot.leftMotor.setPower(0);
+                        robot.rightMotor.setPower(0);
                         telemetry.addData("PIDOutput", decimalFormat.format(0.00));
                     } else {
                         double output = yawPIDResult.getOutput();
@@ -360,7 +361,16 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     private void initializeNavigationController(){
-        navXDevice = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get("nav"),
+
+
+//        navXDevice = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get("nav"),
+//                NAVX_DIM_I2C_PORT,
+//                AHRS.DeviceDataType.kProcessedData,
+//                NAVX_DEVICE_UPDATE_RATE_HZ);
+
+        DeviceInterfaceModule dim = hardwareMap.deviceInterfaceModule.iterator().next();
+        telemetry.addData("DIM Name", dim.getDeviceName());
+        navXDevice = AHRS.getInstance(dim,
                 NAVX_DIM_I2C_PORT,
                 AHRS.DeviceDataType.kProcessedData,
                 NAVX_DEVICE_UPDATE_RATE_HZ);
