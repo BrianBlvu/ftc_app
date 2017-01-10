@@ -232,7 +232,6 @@ public class StateBasedBeaconPusher extends LinearOpMode {
 
     private void driveAlongLineEdge() {
         // TODO: Implement https://ftc-tricks.com/proportional-line-follower/
-        // For now, just drive straight
         double color;
         color = robot.colorDown.red();
         if (color > LINE_FOLLOWING_THRESHOLD_VALUE) {
@@ -297,7 +296,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     private boolean isOnBeaconLineEdge() {
-        return robot.colorDown.green() > LINE_FOLLOWING_THRESHOLD_VALUE;
+        return robot.colorDown.red() > LINE_FOLLOWING_THRESHOLD_VALUE;
     }
 
     private void turnUntilAtTargetAngle() {
