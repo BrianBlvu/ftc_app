@@ -43,6 +43,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import java.lang.Boolean;
+import java.text.*;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.*;
@@ -139,6 +141,66 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         robot.colorDown.enableLed(true);
         robot.colorFrontLeft.enableLed(false);
         robot.colorFrontRight.enableLed(false);
+        Boolean INITIALIZE_MISSION_OPTIONS = true;
+        changeState(SELECT_MISSION_OPTION_START_POSITION);
+        //start initialization phase
+        while(INITIALIZE_MISSION_OPTIONS){
+            switch (currentState)
+            {
+                case SELECT_MISSION_OPTION_START_POSITION:
+                    telemetry.addData("Say", String.format("Start Position? : (%s)", String.valueOf(startPosition)));
+                    telemetry.update();
+                    if (gamepad1.dpad_down){
+                        sleep(250);
+                        switch(startPosition)
+                        {
+                            case Middle:
+                                startPosition = StartPosition.Ramp;
+                                break;
+                            case Ramp:
+                                startPosition = StartPosition.SquareVille;
+                                break;
+                            case SquareVille:
+                                startPosition = StartPosition.Middle;
+                                break;
+
+                        };
+                    }
+                    if(gamepad1.a)
+                    {
+                        sleep(250);
+                        changeState(SELECT_MISSION_OPTION_TEAM_COLOR);
+                    }
+                    break;
+                case SELECT_MISSION_OPTION_TEAM_COLOR:
+                    telemetry.addData("Say", String.format("Blue_Team Or Red_Team? : (%s)", String.valueOf(alliance)));
+                    telemetry.update();
+                    if (gamepad1.dpad_down){
+                        sleep(750);
+                        alliance = (alliance == Color.RED) ? Color.BLUE : Color.RED;
+                    }
+                    if(gamepad1.a)
+                    {
+                        sleep(250);
+                        changeState(SELECT_MISSION_OPTION_BEACONS);
+                    }
+                    break;
+                case SELECT_MISSION_OPTION_BEACONS:
+                    telemetry.addData("Say", String.format("Push Beacons? : (%s)", String.valueOf(getBeacons)));
+                    telemetry.update();
+                    if (gamepad1.dpad_down){
+                        getBeacons = !getBeacons;
+                    }
+                    if(gamepad1.a)
+                    {
+                        sleep(250);
+                        INITIALIZE_MISSION_OPTIONS = false;
+                    }
+                    break;
+            }
+
+        }
+        //end initionalization phase
         changeState(READY_TO_START);
 
         // Send telemetry message to signify robot waiting;
@@ -164,30 +226,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
             switch (currentState)
             {
                 case READY_TO_START:
-                    changeState(SELECT_MISSION_OPTION_START_POSITION);
-                    break;
-                case SELECT_MISSION_OPTION_START_POSITION:
-                    if(gamepad1.a)
-                    {
-                        changeState(SELECT_MISSION_OPTION_TEAM_COLOR);
-                    }
-                    break;
-                case SELECT_MISSION_OPTION_TEAM_COLOR:
-                    if(gamepad1.b)
-                    {
-                        changeState(SELECT_MISSION_OPTION_BEACONS);
-                    }
-                    break;
-                case SELECT_MISSION_OPTION_BEACONS:
-                    telemetry.addData("Say", String.format("Push Beacons? : {0}", getBeacons));
-                    telemetry.update();
-                    if (gamepad1.dpad_right){
-                        getBeacons = !getBeacons;
-                    }
-                    if(gamepad1.y)
-                    {
-                        changeState(WAITING_FOR_CALIBRATION);
-                    }
+                    changeState(WAITING_FOR_CALIBRATION);
                     break;
                 case WAITING_FOR_CALIBRATION:
                     calibrateNavigationBoard();
