@@ -39,7 +39,6 @@ import com.kauailabs.navx.ftc.navXPIDController;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -78,9 +77,9 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     enum StartPosition {
-        Ramp,
-        Middle,
-        SquareVille
+        RAMP,
+        MIDDLE,
+        SQUARE_VILLE
     }
 
     enum Button {
@@ -124,7 +123,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     // TODO: feed in the actual alliance name
     private Color alliance = Color.BLUE;
     private boolean getBeacons = true;
-    private StartPosition startPosition = StartPosition.SquareVille;
+    private StartPosition startPosition = StartPosition.SQUARE_VILLE;
 
     @Override
     public void runOpMode() {
