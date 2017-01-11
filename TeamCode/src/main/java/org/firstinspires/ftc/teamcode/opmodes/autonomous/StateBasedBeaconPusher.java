@@ -213,7 +213,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         Button buttonToPush = LEFT;
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            robot.printStatusToTelemetry(this);
+            //robot.printStatusToTelemetry(this);
             // Here's our strategy:
             // Use gyro to turn right 45 degree so the robot is pointed at the white line of the first beacon
             // Roll forward until detecting the line, using the gyro to roll straight
@@ -229,27 +229,41 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                     changeState(WAITING_FOR_CALIBRATION);
                     break;
                 case WAITING_FOR_CALIBRATION:
+                    this.telemetry.addData("Say", "WAITING FOR CALIBRATION CASE");    //
+                    this.telemetry.update();
                     calibrateNavigationBoard();
                     changeState(STARTING_DELAY);
                     break;
                 case STARTING_DELAY:
+                    this.telemetry.addData("Say", "STARTING DELAY CASE");    //
+                    this.telemetry.update();
                     // TODO: Add delay code
                     changeState(START_TURNING_TO_FIRST_LINE);
                     break;
                 case START_TURNING_TO_FIRST_LINE:
+                    this.telemetry.addData("Say", "START TURNING TO FIRST LINE");    //
+                    this.telemetry.update();
                     setTargetAngle(45);
                     changeState(TURNING_TO_FIRST_LINE);
                     break;
                 case TURNING_TO_FIRST_LINE:
-                    turnUntilAtTargetAngle();
+                    this.telemetry.addData("Say", "TURNING TO FIRST LINE CASE");    //
+                    this.telemetry.update();
+                    //turnUntilAtTargetAngle(); // something odd about this function -- perpetual movement
                     changeState(MOVING_TO_FIRST_LINE);
                     break;
                 case MOVING_TO_FIRST_LINE:
+                    this.telemetry.addData("Say", "MOVING TO FIRST LINE CASE");    //
+                    this.telemetry.update();
                     if (isOnBeaconLineEdge()) {
+                        this.telemetry.addData("Say", "FOLLOWING LINE");    //
+                        this.telemetry.update();
                         changeState(FOLLOWING_LINE);
                     }
                     break;
                 case FOLLOWING_LINE:
+                    this.telemetry.addData("Say", "FOLLOWING LINE CASE");    //
+                    this.telemetry.update();
                     if (isCloseEnoughToBeacon()) {
                         stopMotors();
                         changeState(READING_BEACON_COLORS);
@@ -296,12 +310,18 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         // TODO: Implement https://ftc-tricks.com/proportional-line-follower/
         double color;
         color = robot.colorDown.red();
-        if (color > LINE_FOLLOWING_THRESHOLD_VALUE) {
-            robot.leftMotor.setPower(0.5);
-            robot.rightMotor.setPower(0.0);
+        this.telemetry.addData("Say", "DRIVE ALONG LINE EDGE");    //
+        this.telemetry.update();
+        if (color >= LINE_FOLLOWING_THRESHOLD_VALUE) {
+            robot.leftMotor.setPower(-0.25);
+            robot.rightMotor.setPower(0.1);
+            this.telemetry.addData("Say", "Adjusting speed of left motor: " + robot.leftMotor.getPower());    //
+            this.telemetry.update();
         } else if (color < LINE_FOLLOWING_THRESHOLD_VALUE) {
-            robot.rightMotor.setPower(0.5);
-            robot.leftMotor.setPower(0.0);
+            robot.rightMotor.setPower(-0.25);
+            robot.leftMotor.setPower(0.1);
+            this.telemetry.addData("Say", "Adjusting speed of right motor: " + robot.rightMotor.getPower());    //
+            this.telemetry.update();
         }
     }
 
