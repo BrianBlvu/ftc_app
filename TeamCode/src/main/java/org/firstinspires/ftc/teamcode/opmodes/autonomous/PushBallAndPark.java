@@ -16,9 +16,6 @@ public class PushBallAndPark extends LinearOpMode {
     }
     /* Declare OpMode members. */
     ChainDriveBot1 robot           = new ChainDriveBot1(telemetry);              // Use a K9'shardware
-    double          clawPosition    = robot.BEACON_PUSHER_HOME;                  // Servo safe position
-    final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
-    final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
 
     @Override
     public void runOpMode() {
@@ -36,7 +33,7 @@ public class PushBallAndPark extends LinearOpMode {
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "Hello Evil Driver");    //
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -91,36 +88,7 @@ public class PushBallAndPark extends LinearOpMode {
             {
                 telemetry.addData("Exception", e.getMessage());
             }
-            /*//turn right
-            left = motorSpeed;
-            right = -motorSpeed;
-            robot.leftMotor.setPower(left);
-            robot.rightMotor.setPower(right);
-            try {
-                robot.waitForTick(turnRightMilliseconds);
-                telemetry.addData("Say", "Left");
-                telemetry.update();
-            }
-            catch(Exception e)
-            {
-                telemetry.addData("Exception", e.getMessage());
-            }
-            // move forward
 
-            left = motorSpeed;
-            right = motorSpeed;
-            robot.leftMotor.setPower(left);
-            robot.rightMotor.setPower(right);
-            try {
-                robot.waitForTick(moveForward2Milliseconds);
-                telemetry.addData("Say", "Forward");
-                telemetry.update();
-            }
-            catch(Exception e)
-            {
-                telemetry.addData("Exception", e.getMessage());
-            }*/
-            // turn right
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.update();
