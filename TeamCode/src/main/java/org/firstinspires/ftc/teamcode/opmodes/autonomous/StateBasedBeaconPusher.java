@@ -281,8 +281,8 @@ public class StateBasedBeaconPusher extends LinearOpMode {
             this.telemetry.addData("Say", "Adjusting speed of left motor: " + robot.leftMotor.getPower());    //
             this.telemetry.update();
         } else if (color < LINE_FOLLOWING_THRESHOLD_VALUE) {
-            robot.rightMotor.setPower(-0.25);
-            robot.leftMotor.setPower(0.1);
+            robot.rightMotor.setPower(-0.15);
+            robot.leftMotor.setPower(0);
             this.telemetry.addData("Say", "Adjusting speed of right motor: " + robot.rightMotor.getPower());    //
             this.telemetry.update();
         }
