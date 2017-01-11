@@ -39,7 +39,6 @@ import com.kauailabs.navx.ftc.navXPIDController;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -80,9 +79,9 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     enum StartPosition {
-        Ramp,
-        Middle,
-        SquareVille
+        RAMP,
+        MIDDLE,
+        SQUARE_VILLE
     }
 
     enum Button {
@@ -126,7 +125,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     // TODO: feed in the actual alliance name
     private Color alliance = Color.BLUE;
     private boolean getBeacons = true;
-    private StartPosition startPosition = StartPosition.SquareVille;
+    private StartPosition startPosition = StartPosition.SQUARE_VILLE;
 
     @Override
     public void runOpMode() {
@@ -154,14 +153,14 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                         sleep(250);
                         switch(startPosition)
                         {
-                            case Middle:
-                                startPosition = StartPosition.Ramp;
+                            case MIDDLE:
+                                startPosition = StartPosition.RAMP;
                                 break;
-                            case Ramp:
-                                startPosition = StartPosition.SquareVille;
+                            case RAMP:
+                                startPosition = StartPosition.SQUARE_VILLE;
                                 break;
-                            case SquareVille:
-                                startPosition = StartPosition.Middle;
+                            case SQUARE_VILLE:
+                                startPosition = StartPosition.MIDDLE;
                                 break;
 
                         };
@@ -318,8 +317,8 @@ public class StateBasedBeaconPusher extends LinearOpMode {
             this.telemetry.addData("Say", "Adjusting speed of left motor: " + robot.leftMotor.getPower());    //
             this.telemetry.update();
         } else if (color < LINE_FOLLOWING_THRESHOLD_VALUE) {
-            robot.rightMotor.setPower(-0.25);
-            robot.leftMotor.setPower(0.1);
+            robot.rightMotor.setPower(-0.15);
+            robot.leftMotor.setPower(0);
             this.telemetry.addData("Say", "Adjusting speed of right motor: " + robot.rightMotor.getPower());    //
             this.telemetry.update();
         }
