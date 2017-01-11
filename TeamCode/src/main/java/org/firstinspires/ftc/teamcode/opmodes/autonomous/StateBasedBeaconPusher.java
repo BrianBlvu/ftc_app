@@ -153,14 +153,14 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                         sleep(250);
                         switch(startPosition)
                         {
-                            case Middle:
-                                startPosition = StartPosition.Ramp;
+                            case MIDDLE:
+                                startPosition = StartPosition.RAMP;
                                 break;
-                            case Ramp:
-                                startPosition = StartPosition.SquareVille;
+                            case RAMP:
+                                startPosition = StartPosition.SQUARE_VILLE;
                                 break;
-                            case SquareVille:
-                                startPosition = StartPosition.Middle;
+                            case SQUARE_VILLE:
+                                startPosition = StartPosition.MIDDLE;
                                 break;
 
                         };
