@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.kauailabs.navx.ftc.AHRS;
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -42,6 +44,11 @@ public class ChainDriveBot1
     public ColorSensor colorFrontLeft = null;
     public ColorSensor colorFrontRight = null;
     public OpticalDistanceSensor beaconDistance = null;
+    public AHRS navXDevice;
+
+    private final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
+    private final int NAVX_DIM_I2C_PORT = 0;
+    private boolean calibration_complete = false;
 
     public final static double BEACON_PUSHER_HOME = 0.45; // defines middle position for servo
     public final static double BEACON_PUSHER_SPEED = 0.01; // sets rate to move servo
@@ -61,9 +68,9 @@ public class ChainDriveBot1
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap) {
+    public void init(HardwareMap aHardwareMap) {
         // save reference to HW Map
-        hardwareMap = ahwMap;
+        hardwareMap = aHardwareMap;
 
         leftMotor = hardwareMap.dcMotor.get("left_drive");
         rightMotor = hardwareMap.dcMotor.get("right_drive");
@@ -91,7 +98,7 @@ public class ChainDriveBot1
         // Each color sensor needs a unique I2C address
         if (null != colorDown) {
             colorDown.setI2cAddress(I2cAddr.create8bit(0x40));
-            colorDown.enableLed(false);
+            colorDown.enableLed(true);
         } else {
             telemetry.addData("ChainDriveBot1.init()", "color_down sensor not found");
         }
@@ -110,6 +117,42 @@ public class ChainDriveBot1
         }
 
         beaconDistance = hardwareMap.opticalDistanceSensor.get("beacon_distance");
+
+        initializeNavigationController();
+    }
+
+    private void initializeNavigationController(){
+//        navXDevice = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get("nav"),
+//                NAVX_DIM_I2C_PORT,
+//                AHRS.DeviceDataType.kProcessedData,
+//                NAVX_DEVICE_UPDATE_RATE_HZ);
+
+        DeviceInterfaceModule dim = hardwareMap.deviceInterfaceModule.iterator().next();
+        telemetry.addData("DIM Name", dim.getDeviceName());
+        navXDevice = AHRS.getInstance(dim,
+                NAVX_DIM_I2C_PORT,
+                AHRS.DeviceDataType.kProcessedData,
+                NAVX_DEVICE_UPDATE_RATE_HZ);
+
+        /* If possible, use encoders when driving, as it results in more */
+        /* predictable drive system response.                           */
+        //leftMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        //rightMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+    }
+
+    public void calibrateNavigationBoard() {
+        while (!calibration_complete) {
+                        /* navX-Micro Calibration completes automatically ~15 seconds after it is
+                        powered on, as long as the device is still.  To handle the case where the
+                        navX-Micro has not been able to calibrate successfully, hold off using
+                        the navX-Micro Yaw value until calibration is complete.
+                         */
+            calibration_complete = !navXDevice.isCalibrating();
+            if (!calibration_complete) {
+                telemetry.addData("navX-Micro", "Startup Calibration in Progress");
+            }
+        }
+        navXDevice.zeroYaw();
     }
 
     /***
@@ -137,7 +180,7 @@ public class ChainDriveBot1
         period.reset();
     }
 
-    public void printStatusToTelemetry(OpMode opMode) {
+    public void printRobotStatusToTelemetry(OpMode opMode) {
         // show the values we're currently feeding the motors
         opMode.telemetry.addData("Controls", "leftMotor: %.2f, rightMotor: %.2f, beaconPusherServo: %.2f",
                 leftMotor.getPower(), rightMotor.getPower(), beaconPusher.getPosition());
@@ -151,19 +194,6 @@ public class ChainDriveBot1
         }
 
         opMode.telemetry.addData("OpticalDistanceSensor", beaconDistance);
-
-        // show the state of the current controls
-        opMode.telemetry.addData("Controller1", "lsx:%.2f lsy:%.2f lsb:%b",
-                opMode.gamepad1.left_stick_x, opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_button);
-        opMode.telemetry.addData("Controller1", "rsx:%.2f rsy:%.2f rsb:%b",
-                opMode.gamepad1.right_stick_x, opMode.gamepad1.right_stick_y, opMode.gamepad1.right_stick_button);
-        opMode.telemetry.addData("Controller1", "lt:%.2f rt:%.2f lb:%.2b rb:%.2b",
-                opMode.gamepad1.left_trigger, opMode.gamepad1.right_trigger, opMode.gamepad1.left_bumper,
-                opMode.gamepad1.right_bumper);
-        opMode.telemetry.addData("Controller1", "dpad: l:%b r:%b u:%b d:%b", opMode.gamepad1.dpad_left,
-                opMode.gamepad1.dpad_right, opMode.gamepad1.dpad_up, opMode.gamepad1.dpad_down);
-        opMode.telemetry.addData("Controller1", "x:%b y:%b a:%b b:%b", opMode.gamepad1.x, opMode.gamepad1.y,
-                opMode.gamepad1.a, opMode.gamepad1.b);
-        opMode.telemetry.update();
     }
+
 }

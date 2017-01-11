@@ -112,10 +112,10 @@ public class DriverMode1 extends LinearOpMode {
 
                 wasYAlreadyPressed = isYPressed;
 
-                // If either trigger is pulled more than a little bit, cut the robot's speed 10x
+                // If either trigger is pulled more than a little bit, cut the robot's speed 5x
                 if (gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1) {
-                    leftMotorPower = leftMotorPower / 10;
-                    rightMotorPower = rightMotorPower / 10;
+                    leftMotorPower = leftMotorPower / 5;
+                    rightMotorPower = rightMotorPower / 5;
                 }
 
                 if (robot.leftMotor != null) {
@@ -145,7 +145,7 @@ public class DriverMode1 extends LinearOpMode {
                     telemetry.addData("No beaconPusher installed", "");
                 }
 
-                robot.printStatusToTelemetry(this);
+                robot.printRobotStatusToTelemetry(this);
 
                 // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
                 robot.waitForTick(40);

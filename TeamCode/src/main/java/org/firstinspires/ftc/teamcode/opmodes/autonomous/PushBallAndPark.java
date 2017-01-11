@@ -5,20 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition.MIDDLE;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition.SQUARE_VILLE;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition.RAMP;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Color.RED;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Color.BLUE;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Color;
+import static org.firstinspires.ftc.teamcode.lib.Util.StartPosition.MIDDLE;
+import static org.firstinspires.ftc.teamcode.lib.Util.StartPosition;
+import static org.firstinspires.ftc.teamcode.lib.Util.Color.RED;
+import static org.firstinspires.ftc.teamcode.lib.Util.Color;
 
-
-/**
- * Created by Thomas on 11/19/2016.
- */
 @Disabled
-@Autonomous(name="AutonomousMode1Blue", group="Autonomous")
+@Autonomous(name="PushBallAndPark", group="Autonomous")
 public class PushBallAndPark extends LinearOpMode {
     final double MOTOR_POWER = 0.5;
 
@@ -52,6 +45,8 @@ public class PushBallAndPark extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            // TODO: Add delay
+
             telemetry.addData("Say", "IN WHILE STATEMENT");
             telemetry.update();
 
