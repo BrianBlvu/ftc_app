@@ -5,6 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition.MIDDLE;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition.SQUARE_VILLE;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.StartPosition.RAMP;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Color.RED;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Color.BLUE;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Color;
+
 
 /**
  * Created by Thomas on 11/19/2016.
@@ -12,13 +20,10 @@ import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 @Disabled
 @Autonomous(name="AutonomousMode1Blue", group="Autonomous")
 public class PushBallAndPark extends LinearOpMode {
-    {
-    }
-    /* Declare OpMode members. */
-    ChainDriveBot1 robot           = new ChainDriveBot1(telemetry);              // Use a K9'shardware
-    double          clawPosition    = robot.BEACON_PUSHER_HOME;                  // Servo safe position
-    final double    CLAW_SPEED      = 0.01 ;                            // sets rate to move servo
-    final double    ARM_SPEED       = 0.01 ;                            // sets rate to move servo
+    final double MOTOR_POWER = 0.5;
+
+    ChainDriveBot1 robot           = new ChainDriveBot1(telemetry);
+
 
     @Override
     public void runOpMode() {
@@ -28,7 +33,10 @@ public class PushBallAndPark extends LinearOpMode {
         long moveForward1Millisecond = 1000;
         long turnRightMilliseconds = 1000;
         long moveForward2Milliseconds = 2000;
-        double motorSpeed = 0.5;
+
+        StartPosition startPosition = MIDDLE;
+        Color Color = RED;
+        int delayInSeconds = 5;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -48,8 +56,8 @@ public class PushBallAndPark extends LinearOpMode {
             telemetry.update();
 
             //move forward
-            left = motorSpeed;
-            right = motorSpeed;
+            left = MOTOR_POWER;
+            right = MOTOR_POWER;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
             try {
@@ -63,8 +71,8 @@ public class PushBallAndPark extends LinearOpMode {
             }
             // turn left
 
-            left = -motorSpeed;
-            right = motorSpeed;
+            left = -MOTOR_POWER;
+            right = MOTOR_POWER;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
             try {
@@ -78,8 +86,8 @@ public class PushBallAndPark extends LinearOpMode {
             }
             // move forward
 
-            left = motorSpeed;
-            right = motorSpeed;
+            left = MOTOR_POWER;
+            right = MOTOR_POWER;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
             try {
@@ -92,8 +100,8 @@ public class PushBallAndPark extends LinearOpMode {
                 telemetry.addData("Exception", e.getMessage());
             }
             /*//turn right
-            left = motorSpeed;
-            right = -motorSpeed;
+            left = MOTOR_POWER;
+            right = -MOTOR_POWER;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
             try {
@@ -107,8 +115,8 @@ public class PushBallAndPark extends LinearOpMode {
             }
             // move forward
 
-            left = motorSpeed;
-            right = motorSpeed;
+            left = MOTOR_POWER;
+            right = MOTOR_POWER;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
             try {
