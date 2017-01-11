@@ -45,18 +45,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
-
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.BACKING_UP;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.FOLLOWING_LINE;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.MOVING_TO_FIRST_LINE;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.PUSHING_BEACON_BUTTON;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.READING_BEACON_COLORS;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.READY_TO_START;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.STARTING_DELAY;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.START_TURNING_TO_FIRST_LINE;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.STOPPED;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.TURNING_TO_FIRST_LINE;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.WAITING_FOR_CALIBRATION;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.*;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Button.LEFT;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Button.RIGHT;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.Color.RED;
@@ -77,12 +66,21 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         READING_BEACON_COLORS,
         PUSHING_BEACON_BUTTON,
         BACKING_UP,
-        PLACEHOLDER_FOR_SECOND_BEACON_STATES
+        PLACEHOLDER_FOR_SECOND_BEACON_STATES,
+        SELECT_MISSION_OPTION_START_POSITION,
+        SELECT_MISSION_OPTION_TEAM_COLOR,
+        SELECT_MISSION_OPTION_BEACONS
     }
 
     enum Color {
         RED,
         BLUE
+    }
+
+    enum StartPosition {
+        Ramp,
+        Middle,
+        SquareVille
     }
 
     enum Button {
@@ -125,6 +123,8 @@ public class StateBasedBeaconPusher extends LinearOpMode {
 
     // TODO: feed in the actual alliance name
     private Color alliance = Color.BLUE;
+    private boolean getBeacons = true;
+    private StartPosition startPosition = StartPosition.SquareVille;
 
     @Override
     public void runOpMode() {
@@ -164,7 +164,30 @@ public class StateBasedBeaconPusher extends LinearOpMode {
             switch (currentState)
             {
                 case READY_TO_START:
-                    changeState(WAITING_FOR_CALIBRATION);
+                    changeState(SELECT_MISSION_OPTION_START_POSITION);
+                    break;
+                case SELECT_MISSION_OPTION_START_POSITION:
+                    if(gamepad1.a)
+                    {
+                        changeState(SELECT_MISSION_OPTION_TEAM_COLOR);
+                    }
+                    break;
+                case SELECT_MISSION_OPTION_TEAM_COLOR:
+                    if(gamepad1.b)
+                    {
+                        changeState(SELECT_MISSION_OPTION_BEACONS);
+                    }
+                    break;
+                case SELECT_MISSION_OPTION_BEACONS:
+                    telemetry.addData("Say", String.format("Push Beacons? : {0}", getBeacons));
+                    telemetry.update();
+                    if (gamepad1.dpad_right){
+                        getBeacons = !getBeacons;
+                    }
+                    if(gamepad1.y)
+                    {
+                        changeState(WAITING_FOR_CALIBRATION);
+                    }
                     break;
                 case WAITING_FOR_CALIBRATION:
                     calibrateNavigationBoard();
