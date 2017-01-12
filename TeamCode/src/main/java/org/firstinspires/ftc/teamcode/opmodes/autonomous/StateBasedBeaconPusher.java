@@ -38,6 +38,10 @@ import com.kauailabs.navx.ftc.navXPIDController;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -99,7 +103,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     private final int DEVICE_TIMEOUT_MS = 500;
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-    private final double BEACON_DISTANCE_THRESHOLD = 0.5; // TODO: Calibrate beacon distance threshold with testing
+    private final int BEACON_DISTANCE_THRESHOLD = 10; //In centimeters TODO: Calibrate beacon distance threshold with testing
     private final int LINE_FOLLOWING_THRESHOLD_VALUE = 5;
 
     private Color alliance = Color.BLUE; // This is just a default. It's replaced in menu selection.
@@ -290,8 +294,55 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     }
 
     private boolean isCloseEnoughToBeacon() {
+       int currentDistance = 255;
+        while (currentDistance > BEACON_DISTANCE_THRESHOLD ) {
+
+         // TODO: Read sensor and place in currentDistance
+            currentDistance = getSensorDistance();
+        }
+
+
+
+
         return robot.beaconDistance.getLightDetected() > BEACON_DISTANCE_THRESHOLD;
     }
+
+    private int getSensorDistance(){
+        int opticalDistanceCm;
+        int ultrasonicDistanceCm;
+
+        I2cAddr RANGE1ADDRESS = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
+        final int RANGE1_REG_START = 0x04; //Register to start reading
+        final int RANGE1_READ_LENGTH = 2; //Number of byte to read
+
+        I2cDevice RANGE1;
+        I2cDeviceSynch RANGE1Reader;
+        RANGE1 = hardwareMap.i2cDevice.get("range");
+        RANGE1Reader = new I2cDeviceSynchImpl(RANGE1, RANGE1ADDRESS, false);
+        RANGE1Reader.engage();
+
+
+        byte[] range1Cache = RANGE1Reader.read(RANGE1_REG_START, RANGE1_READ_LENGTH);
+        ultrasonicDistanceCm = range1Cache[0] & 0xFF;
+        opticalDistanceCm = range1Cache[1] & 0xFF;
+
+        printMessageToTelemetry("Range optical = " + opticalDistanceCm);
+        printMessageToTelemetry("Range ultrasonic = " + ultrasonicDistanceCm);
+       // telemetry.addData("Ultra Sonic", range1Cache[0] & 0xFF);
+       // telemetry.addData("ODS", range1Cache[1] & 0xFF);
+       // telemetry.addData("Status", "Run Time: " + runtime.toString());
+       // telemetry.update();
+
+        if (opticalDistanceCm > ultrasonicDistanceCm)
+            return ultrasonicDistanceCm;
+        else
+            return  opticalDistanceCm;
+
+    }
+
+
+
+
 
     private Color getSensorColor(Button side) {
         if (side == LEFT) {
