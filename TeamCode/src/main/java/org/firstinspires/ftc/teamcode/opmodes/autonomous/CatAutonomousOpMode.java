@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.lib.Util;
 
 import static org.firstinspires.ftc.teamcode.lib.Util.MENU_DELAY;
 import static org.firstinspires.ftc.teamcode.lib.Util.printControlerStatusToTelemetry;
--import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.READY_TO_START;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.READY_TO_START;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_START_DELAY;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_TEAM_COLOR;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.STOPPED;
