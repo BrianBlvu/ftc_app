@@ -37,14 +37,11 @@ import android.util.Log;
 import com.kauailabs.navx.ftc.navXPIDController;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
-import org.firstinspires.ftc.teamcode.lib.Util;
 
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.*;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.*;
 import static org.firstinspires.ftc.teamcode.lib.Util.Button.LEFT;
 import static org.firstinspires.ftc.teamcode.lib.Util.Button.RIGHT;
 import static org.firstinspires.ftc.teamcode.lib.Util.Color.RED;
@@ -54,24 +51,6 @@ import java.text.DecimalFormat;
 
 @Autonomous(name="StateBasedBeaconPusher", group="Autonomous")
 public class StateBasedBeaconPusher extends CatAutonomousOpMode {
-
-    enum State {
-        STOPPED,
-        READY_TO_START,
-        WAITING_FOR_CALIBRATION,
-        STARTING_DELAY,
-        START_TURNING_TO_FIRST_LINE,
-        TURNING_TO_FIRST_LINE,
-        MOVING_TO_FIRST_LINE,
-        FOLLOWING_LINE,
-        READING_BEACON_COLORS,
-        PUSHING_BEACON_BUTTON,
-        BACKING_UP,
-        PLACEHOLDER_FOR_SECOND_BEACON_STATES,
-        SELECT_MISSION_OPTION_START_POSITION,
-        SELECT_MISSION_OPTION_TEAM_COLOR,
-        SELECT_MISSION_OPTION_START_DELAY
-    }
 
     /* This is the port on the Core Device Interface Module       */
     /* in which the navX-Model Device is connected.  Modify this  */
@@ -95,7 +74,6 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
 
     @Override
     public void runOpMode() {
-        Color current_team;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here

@@ -8,11 +8,10 @@ import org.firstinspires.ftc.teamcode.lib.Util;
 
 import static org.firstinspires.ftc.teamcode.lib.Util.MENU_DELAY;
 import static org.firstinspires.ftc.teamcode.lib.Util.printControlerStatusToTelemetry;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.READY_TO_START;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.SELECT_MISSION_OPTION_START_DELAY;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.SELECT_MISSION_OPTION_START_POSITION;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.SELECT_MISSION_OPTION_TEAM_COLOR;
-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.STOPPED;
+-import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.READY_TO_START;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_START_DELAY;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_TEAM_COLOR;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.STOPPED;
 
 
 public abstract class CatAutonomousOpMode extends LinearOpMode {
@@ -106,5 +105,23 @@ public abstract class CatAutonomousOpMode extends LinearOpMode {
     protected void changeState(StateBasedBeaconPusher.State newState) {
         previousState = currentState;
         currentState = newState;
+    }
+
+    enum State {
+        STOPPED,
+        READY_TO_START,
+        WAITING_FOR_CALIBRATION,
+        STARTING_DELAY,
+        START_TURNING_TO_FIRST_LINE,
+        TURNING_TO_FIRST_LINE,
+        MOVING_TO_FIRST_LINE,
+        FOLLOWING_LINE,
+        READING_BEACON_COLORS,
+        PUSHING_BEACON_BUTTON,
+        BACKING_UP,
+        PLACEHOLDER_FOR_SECOND_BEACON_STATES,
+        SELECT_MISSION_OPTION_START_POSITION,
+        SELECT_MISSION_OPTION_TEAM_COLOR,
+        SELECT_MISSION_OPTION_START_DELAY
     }
 }
