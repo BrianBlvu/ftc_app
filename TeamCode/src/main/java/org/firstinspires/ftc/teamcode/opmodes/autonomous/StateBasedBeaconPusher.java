@@ -42,6 +42,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
+import org.firstinspires.ftc.teamcode.lib.Util;
+
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.StateBasedBeaconPusher.State.*;
 import static org.firstinspires.ftc.teamcode.lib.Util.Button.LEFT;
 import static org.firstinspires.ftc.teamcode.lib.Util.Button.RIGHT;
@@ -51,7 +53,7 @@ import static org.firstinspires.ftc.teamcode.lib.Util.*;
 import java.text.DecimalFormat;
 
 @Autonomous(name="StateBasedBeaconPusher", group="Autonomous")
-public class StateBasedBeaconPusher extends LinearOpMode {
+public class StateBasedBeaconPusher extends CatAutonomousOpMode {
 
     enum State {
         STOPPED,
@@ -71,13 +73,6 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         SELECT_MISSION_OPTION_START_DELAY
     }
 
-    ChainDriveBot1 robot = new ChainDriveBot1(telemetry);
-
-    private State previousState = STOPPED;
-    private State currentState = STOPPED;
-    private ElapsedTime runtime = new ElapsedTime();
-    private ElapsedTime stateTimer = new ElapsedTime();
-
     /* This is the port on the Core Device Interface Module       */
     /* in which the navX-Model Device is connected.  Modify this  */
     /* depending upon which I2C port you are using.               */
@@ -86,13 +81,9 @@ public class StateBasedBeaconPusher extends LinearOpMode {
     private boolean pushedSecondBeacon = false;
     private double beaconPusherPosition = ChainDriveBot1.BEACON_PUSHER_HOME; // Servo safe position
 
-    private final double TOTAL_RUN_TIME_SECONDS = 30.0;
-
     private navXPIDController yawPIDController;
     private final double TARGET_ANGLE_DEGREES = 90.0;
     private final double TOLERANCE_DEGREES = 2.0;
-    private final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
-    private final double MAX_MOTOR_OUTPUT_VALUE = 1.0;
     private final double YAW_PID_P = 0.005;
     private final double YAW_PID_I = 0.0;
     private final double YAW_PID_D = 0.0;
@@ -101,11 +92,6 @@ public class StateBasedBeaconPusher extends LinearOpMode {
 
     private final double BEACON_DISTANCE_THRESHOLD = 0.5; // TODO: Calibrate beacon distance threshold with testing
     private final int LINE_FOLLOWING_THRESHOLD_VALUE = 5;
-
-    private Color alliance = Color.BLUE; // This is just a default. It's replaced in menu selection.
-    private int startDelayInSeconds = 0;
-    private StartPosition startPosition = StartPosition.SQUARE_VILLE;
-    private String currentMessage = null;
 
     @Override
     public void runOpMode() {
@@ -120,56 +106,8 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         robot.colorFrontLeft.enableLed(false);
         robot.colorFrontRight.enableLed(false);
         changeState(SELECT_MISSION_OPTION_START_POSITION);
+        telemetryMenu();
 
-        // Get the menu options for start position, alliance, and start delay
-        while(currentState != READY_TO_START){
-            switch (currentState)
-            {
-                case SELECT_MISSION_OPTION_START_POSITION:
-                    telemetry.addData("Start Position? ", String.format("(%s)", String.valueOf(startPosition)));
-                    telemetry.update();
-                    if (gamepad1.dpad_down) {
-                        switch(startPosition)
-                        {
-                            case MIDDLE:
-                                startPosition = StartPosition.RAMP;
-                                break;
-                            case RAMP:
-                                startPosition = StartPosition.SQUARE_VILLE;
-                                break;
-                            case SQUARE_VILLE:
-                                startPosition = StartPosition.MIDDLE;
-                                break;
-                        };
-                    } else if(gamepad1.a) {
-                        changeState(SELECT_MISSION_OPTION_TEAM_COLOR);
-                    }
-                    break;
-                case SELECT_MISSION_OPTION_TEAM_COLOR:
-                    telemetry.addData("Blue_Team Or Red_Team? ", String.format("(%s)", String.valueOf(alliance)));
-                    telemetry.update();
-                    if (gamepad1.dpad_down) {
-                        alliance = (alliance == Color.RED) ? Color.BLUE : Color.RED;
-                    } else if(gamepad1.a) {
-                        changeState(SELECT_MISSION_OPTION_START_DELAY);
-                    }
-                    break;
-                case SELECT_MISSION_OPTION_START_DELAY:
-                    telemetry.addData("Start Delay ", String.format("(%s)", String.valueOf(startDelayInSeconds)));
-                    telemetry.update();
-                    if (gamepad1.dpad_down){
-                        startDelayInSeconds++;
-                        if (startDelayInSeconds > 20) startDelayInSeconds = 20;
-                    } else if (gamepad1.dpad_up) {
-                        startDelayInSeconds--;
-                        if (startDelayInSeconds < 0) startDelayInSeconds = 0;
-                    } else if(gamepad1.a) {
-                        changeState(READY_TO_START);
-                    }
-                    break;
-            }
-            sleep(MENU_DELAY);
-        }
 
         printMessageToTelemetry("Options Selected. Ready to Start");
 
@@ -199,7 +137,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                     changeState(STARTING_DELAY);
                     break;
                 case STARTING_DELAY:
-                    sleep(startDelayInSeconds *1000) ;
+                    // TODO: Add delay code
                     changeState(START_TURNING_TO_FIRST_LINE);
                     break;
                 case START_TURNING_TO_FIRST_LINE:
@@ -207,7 +145,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                     changeState(TURNING_TO_FIRST_LINE);
                     break;
                 case TURNING_TO_FIRST_LINE:
-                    //TODO: Fix turning code so it doesn't turn forever
+                    // TODO: Fix turning code so it doesn't turn forever
                     //turnUntilAtTargetAngle(); // something odd about this function -- perpetual movement
                     changeState(MOVING_TO_FIRST_LINE);
                     break;
@@ -256,22 +194,6 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                     stopMotors();
             }
         }
-    }
-
-    private void printMessageToTelemetry(String message) {
-        currentMessage = message;
-        printStatusToTelemetry();
-    }
-    private void printStatusToTelemetry() {
-        if (currentMessage != null) {
-            telemetry.addData("Message", currentMessage);
-        }
-        telemetry.addData("", "Aliance: " + alliance + " StartPosition: " + startPosition
-                + " Delay " + startDelayInSeconds + "s");
-        telemetry.addData("State", currentState + " PreviousState: " + previousState);
-        robot.printRobotStatusToTelemetry(this);
-        printControlerStatusToTelemetry(telemetry, gamepad1);
-        telemetry.update();
     }
 
     private void driveAlongLineEdge() {
@@ -336,11 +258,6 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         }
     }
 
-    private void stopMotors() {
-        robot.leftMotor.setPower(0.0);
-        robot.rightMotor.setPower(0.0);
-    }
-
     private boolean isOnBeaconLineEdge() {
         return robot.colorDown.red() > LINE_FOLLOWING_THRESHOLD_VALUE;
     }
@@ -395,8 +312,4 @@ public class StateBasedBeaconPusher extends LinearOpMode {
         yawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
     }
 
-    private void changeState(State newState) {
-        previousState = currentState;
-        currentState = newState;
-    }
 }

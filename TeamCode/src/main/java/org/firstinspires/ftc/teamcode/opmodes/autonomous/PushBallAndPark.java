@@ -12,7 +12,7 @@ import static org.firstinspires.ftc.teamcode.lib.Util.Color;
 
 @Disabled
 @Autonomous(name="PushBallAndPark", group="Autonomous")
-public class PushBallAndPark extends LinearOpMode {
+public class PushBallAndPark extends CatAutonomousOpMode {
     final double MOTOR_POWER = 0.5;
 
     ChainDriveBot1 robot           = new ChainDriveBot1(telemetry);
