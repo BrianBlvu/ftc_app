@@ -86,7 +86,6 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
         changeState(SELECT_MISSION_OPTION_START_POSITION);
         telemetryMenu();
 
-
         printMessageToTelemetry("Options Selected. Ready to Start");
 
         // Wait for the game to start (driver presses PLAY)
@@ -115,7 +114,7 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
                     changeState(STARTING_DELAY);
                     break;
                 case STARTING_DELAY:
-                    // TODO: Add delay code
+                    sleep(startDelayInSeconds*1000);
                     changeState(START_TURNING_TO_FIRST_LINE);
                     break;
                 case START_TURNING_TO_FIRST_LINE:
@@ -210,12 +209,8 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
     }
 
     private boolean beaconPushedEnough() {
-        if (beaconPusherPosition <= ChainDriveBot1.BEACON_PUSHER_LEFT_PUSHING_POSITION
-            || beaconPusherPosition >= ChainDriveBot1.BEACON_PUSHER_RIGHT_PUSHING_POSITION) {
-            return true;
-        } else {
-            return false;
-        }
+        return beaconPusherPosition <= ChainDriveBot1.BEACON_PUSHER_LEFT_PUSHING_POSITION
+                || beaconPusherPosition >= ChainDriveBot1.BEACON_PUSHER_RIGHT_PUSHING_POSITION;
     }
 
     private void pushButton(Button buttonToPush) {

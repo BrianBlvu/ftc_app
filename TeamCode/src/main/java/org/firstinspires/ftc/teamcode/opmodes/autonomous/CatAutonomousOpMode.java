@@ -24,8 +24,8 @@ public abstract class CatAutonomousOpMode extends LinearOpMode {
     ChainDriveBot1 robot = new ChainDriveBot1(telemetry);
     private StateBasedBeaconPusher.State previousState = STOPPED;
     private ElapsedTime stateTimer = new ElapsedTime();
-    private int startDelayInSeconds = 0;
-    private Util.StartPosition startPosition = Util.StartPosition.SQUARE_VILLE;
+    protected int startDelayInSeconds = 0;
+    protected Util.StartPosition startPosition = Util.StartPosition.SQUARE_VILLE;
     private String currentMessage = null;
 
     protected void telemetryMenu() {
@@ -48,7 +48,7 @@ public abstract class CatAutonomousOpMode extends LinearOpMode {
                             case SQUARE_VILLE:
                                 startPosition = Util.StartPosition.MIDDLE;
                                 break;
-                        };
+                        }
                     } else if(gamepad1.a) {
                         changeState(SELECT_MISSION_OPTION_TEAM_COLOR);
                     }
