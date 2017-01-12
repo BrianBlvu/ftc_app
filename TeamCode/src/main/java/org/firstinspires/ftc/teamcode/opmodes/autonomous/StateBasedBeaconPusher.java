@@ -159,7 +159,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                     telemetry.update();
                     if (gamepad1.dpad_down){
                         startDelayInSeconds++;
-                        if (startDelayInSeconds > 25) startDelayInSeconds = 25;
+                        if (startDelayInSeconds > 20) startDelayInSeconds = 20;
                     } else if (gamepad1.dpad_up) {
                         startDelayInSeconds--;
                         if (startDelayInSeconds < 0) startDelayInSeconds = 0;
@@ -199,7 +199,7 @@ public class StateBasedBeaconPusher extends LinearOpMode {
                     changeState(STARTING_DELAY);
                     break;
                 case STARTING_DELAY:
-                    // TODO: Add delay code
+                    sleep(startDelayInSeconds *1000) ;
                     changeState(START_TURNING_TO_FIRST_LINE);
                     break;
                 case START_TURNING_TO_FIRST_LINE:
