@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 import static org.firstinspires.ftc.teamcode.lib.Util.StartPosition.MIDDLE;
 import static org.firstinspires.ftc.teamcode.lib.Util.StartPosition;
 import static org.firstinspires.ftc.teamcode.lib.Util.Color.RED;
 import static org.firstinspires.ftc.teamcode.lib.Util.Color;
+import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_START_POSITION;
 
-@Disabled
 @Autonomous(name="PushBallAndPark", group="Autonomous")
-public class PushBallAndPark extends LinearOpMode {
+public class PushBallAndPark extends CatAutonomousOpMode {
     final double MOTOR_POWER = 0.5;
 
     ChainDriveBot1 robot           = new ChainDriveBot1(telemetry);
-
 
     @Override
     public void runOpMode() {
@@ -35,10 +31,8 @@ public class PushBallAndPark extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
-        telemetry.update();
+        changeState(SELECT_MISSION_OPTION_START_POSITION);
+        telemetryMenu();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
