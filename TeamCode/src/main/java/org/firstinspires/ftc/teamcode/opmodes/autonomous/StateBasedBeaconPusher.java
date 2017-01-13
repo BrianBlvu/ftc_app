@@ -89,11 +89,15 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        printMessageToTelemetry("Started 1");
         runtime.startTime();
+        printMessageToTelemetry("Started 2");
         Button buttonToPush = LEFT;
         // run until the end of the match (driver presses STOP)
+        int i = 0;
         while (opModeIsActive()) {
-            printStatusToTelemetry();
+            printMessageToTelemetry(""+ i++);
+            //printStatusToTelemetry();
             // Here's our strategy:
             // Use gyro to turn right 45 degree so the robot is pointed at the white line of the first beacon
             // Roll forward until detecting the line, using the gyro to roll straight
