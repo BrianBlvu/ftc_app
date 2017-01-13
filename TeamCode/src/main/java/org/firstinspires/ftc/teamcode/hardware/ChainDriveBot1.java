@@ -35,6 +35,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 public class ChainDriveBot1
 {
+    public static final int LINE_FOLLOWING_THRESHOLD_VALUE = 5;
     /* Public OpMode members. */
     public DcMotor leftMotor = null;
     public DcMotor rightMotor = null;

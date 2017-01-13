@@ -70,7 +70,6 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
     private final double BEACON_DISTANCE_THRESHOLD = 0.5; // TODO: Calibrate beacon distance threshold with testing
-    private final int LINE_FOLLOWING_THRESHOLD_VALUE = 5;
 
     @Override
     public void runOpMode() {
@@ -135,7 +134,7 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
                     if (isCloseEnoughToBeacon()) {
                         changeState(READING_BEACON_COLORS);
                     } else {
-                        driveAlongLineEdge();
+                        driveAlongLineEdge(robot, this);
                     }
                     break;
                 case READING_BEACON_COLORS:
@@ -170,21 +169,6 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
                 case STOPPED:
                     stopMotors();
             }
-        }
-    }
-
-    private void driveAlongLineEdge() {
-        // TODO: Implement https://ftc-tricks.com/proportional-line-follower/
-        double color;
-        color = robot.colorDown.red();
-        if (color >= LINE_FOLLOWING_THRESHOLD_VALUE) {
-            robot.leftMotor.setPower(-0.25);
-            robot.rightMotor.setPower(0.1);
-            printMessageToTelemetry("Adjusting speed of left motor: " + robot.leftMotor.getPower());
-        } else if (color < LINE_FOLLOWING_THRESHOLD_VALUE) {
-            robot.rightMotor.setPower(-0.15);
-            robot.leftMotor.setPower(0);
-            printMessageToTelemetry("Adjusting speed of right motor: " + robot.rightMotor.getPower());
         }
     }
 
@@ -232,7 +216,7 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
     }
 
     private boolean isOnBeaconLineEdge() {
-        return robot.colorDown.red() > LINE_FOLLOWING_THRESHOLD_VALUE;
+        return robot.colorDown.red() > ChainDriveBot1.LINE_FOLLOWING_THRESHOLD_VALUE;
     }
 
     private void turnUntilAtTargetAngle() {

@@ -13,7 +13,6 @@ import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpM
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_TEAM_COLOR;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.STOPPED;
 
-
 public abstract class CatAutonomousOpMode extends LinearOpMode {
     protected final double TOTAL_RUN_TIME_SECONDS = 30.0;
     protected final double MIN_MOTOR_OUTPUT_VALUE = -1.0;
@@ -80,12 +79,12 @@ public abstract class CatAutonomousOpMode extends LinearOpMode {
         }
     }
 
-    protected void printMessageToTelemetry(String message) {
+    public void printMessageToTelemetry(String message) {
         currentMessage = message;
         printStatusToTelemetry();
     }
 
-    protected void printStatusToTelemetry() {
+    public void printStatusToTelemetry() {
         if (currentMessage != null) {
             telemetry.addData("Message", currentMessage);
         }

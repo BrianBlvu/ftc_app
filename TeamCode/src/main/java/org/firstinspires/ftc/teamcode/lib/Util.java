@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.lib;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
+import org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode;
 
 public class Util {
     public static final int MENU_DELAY = 250;
@@ -20,6 +22,21 @@ public class Util {
                 gamepad.dpad_right, gamepad.dpad_up, gamepad.dpad_down);
         telemetry.addData("Controller1", "x:%b y:%b a:%b b:%b", gamepad.x, gamepad.y,
                 gamepad.a, gamepad.b);
+    }
+
+    public static void driveAlongLineEdge(ChainDriveBot1 robot, CatAutonomousOpMode opMode) {
+        // TODO: Implement https://ftc-tricks.com/proportional-line-follower/
+        double color;
+        color = robot.colorDown.red();
+        if (color >= ChainDriveBot1.LINE_FOLLOWING_THRESHOLD_VALUE) {
+            robot.leftMotor.setPower(-0.25);
+            robot.rightMotor.setPower(0.1);
+            opMode.printMessageToTelemetry("Adjusting speed of left motor: " + robot.leftMotor.getPower());
+        } else if (color < ChainDriveBot1.LINE_FOLLOWING_THRESHOLD_VALUE) {
+            robot.rightMotor.setPower(-0.15);
+            robot.leftMotor.setPower(0);
+            opMode.printMessageToTelemetry("Adjusting speed of right motor: " + robot.rightMotor.getPower());
+        }
     }
 
     public enum Color {
