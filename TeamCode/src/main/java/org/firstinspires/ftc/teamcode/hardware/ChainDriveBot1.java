@@ -94,8 +94,8 @@ public class ChainDriveBot1
         beaconPusher.setPosition(BEACON_PUSHER_HOME);
 
         colorDown = hardwareMap.colorSensor.get("color_down");
-        colorFrontLeft = hardwareMap.colorSensor.get("color_front_left");
-        colorFrontRight = hardwareMap.colorSensor.get("color_front_right");
+        colorFrontLeft = hardwareMap.colorSensor.get("color_left");
+        colorFrontRight = hardwareMap.colorSensor.get("color_right");
 
         // Each color sensor needs a unique I2C address
         if (null != colorDown) {
