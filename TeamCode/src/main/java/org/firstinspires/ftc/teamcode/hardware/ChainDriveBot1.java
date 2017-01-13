@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -44,7 +45,7 @@ public class ChainDriveBot1
     public ColorSensor colorDown = null;
     public ColorSensor colorFrontLeft = null;
     public ColorSensor colorFrontRight = null;
-    public OpticalDistanceSensor beaconDistance = null;
+    public ModernRoboticsI2cRangeSensor beaconDistance = null;
     public AHRS navXDevice;
 
     private final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
@@ -117,7 +118,7 @@ public class ChainDriveBot1
             telemetry.addData("ChainDriveBot1.init()", "color_front_right sensor not found");
         }
 
-        beaconDistance = hardwareMap.opticalDistanceSensor.get("beacon_distance");
+        beaconDistance = hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"range");
 
         initializeNavigationController();
     }

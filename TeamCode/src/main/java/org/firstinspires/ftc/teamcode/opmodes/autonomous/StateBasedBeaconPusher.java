@@ -39,6 +39,7 @@ import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.*;
@@ -177,7 +178,7 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
     }
 
     private boolean isCloseEnoughToBeacon() {
-        return robot.beaconDistance.getLightDetected() > BEACON_DISTANCE_THRESHOLD;
+        return robot.beaconDistance.getDistance(DistanceUnit.CM) < BEACON_DISTANCE_THRESHOLD;
     }
 
     private Color getSensorColor(Button side) {
