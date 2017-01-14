@@ -31,11 +31,11 @@ public class Util {
         if (color >= ChainDriveBot1.LINE_FOLLOWING_THRESHOLD_VALUE) {
             robot.leftMotor.setPower(-0.25);
             robot.rightMotor.setPower(0.1);
-            opMode.printMessageToTelemetry("Adjusting speed of left motor: " + robot.leftMotor.getPower());
+            //opMode.printMessageToTelemetry("Adjusting speed of left motor: " + robot.leftMotor.getPower());
         } else if (color < ChainDriveBot1.LINE_FOLLOWING_THRESHOLD_VALUE) {
             robot.rightMotor.setPower(-0.15);
             robot.leftMotor.setPower(0);
-            opMode.printMessageToTelemetry("Adjusting speed of right motor: " + robot.rightMotor.getPower());
+            //opMode.printMessageToTelemetry("Adjusting speed of right motor: " + robot.rightMotor.getPower());
         }
     }
 
