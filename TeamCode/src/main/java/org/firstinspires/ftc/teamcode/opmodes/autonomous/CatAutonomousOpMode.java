@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 import org.firstinspires.ftc.teamcode.lib.Util;
 
 import static org.firstinspires.ftc.teamcode.lib.Util.MENU_DELAY;
-import static org.firstinspires.ftc.teamcode.lib.Util.printControlerStatusToTelemetry;
+import static org.firstinspires.ftc.teamcode.lib.Util.printControllerStatusToTelemetry;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.READY_TO_START;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_START_DELAY;
 import static org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode.State.SELECT_MISSION_OPTION_TEAM_COLOR;
@@ -92,7 +92,7 @@ public abstract class CatAutonomousOpMode extends LinearOpMode {
                 + " Delay " + startDelayInSeconds + "s");
         telemetry.addData("State", currentState + " PreviousState: " + previousState);
         robot.printRobotStatusToTelemetry(this);
-        printControlerStatusToTelemetry(telemetry, gamepad1);
+        printControllerStatusToTelemetry(telemetry, gamepad1);
         telemetry.update();
     }
 

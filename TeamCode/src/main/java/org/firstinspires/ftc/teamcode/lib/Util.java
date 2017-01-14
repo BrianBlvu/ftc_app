@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.opmodes.autonomous.CatAutonomousOpMode;
 public class Util {
     public static final int MENU_DELAY = 250;
 
-    public static void printControlerStatusToTelemetry(Telemetry telemetry, Gamepad gamepad) {
+    public static void printControllerStatusToTelemetry(Telemetry telemetry, Gamepad gamepad) {
         // show the state of the current controls
         telemetry.addData("Controller1", "lsx:%.2f lsy:%.2f lsb:%b",
                 gamepad.left_stick_x, gamepad.left_stick_y, gamepad.left_stick_button);
