@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
 import org.firstinspires.ftc.teamcode.lib.Util;
 
-import static org.firstinspires.ftc.teamcode.lib.Util.printControlerStatusToTelemetry;
+import static org.firstinspires.ftc.teamcode.lib.Util.printControllerStatusToTelemetry;
 
 /**
  * This OpMode uses the ChainDriveBot1 class to define the devices on the robot.
@@ -174,7 +174,7 @@ public class DriverMode1 extends LinearOpMode {
             telemetry.addData("Message", currentMessage);
         }
         robot.printRobotStatusToTelemetry(this);
-        printControlerStatusToTelemetry(telemetry, gamepad1);
+        printControllerStatusToTelemetry(telemetry, gamepad1);
         telemetry.update();
     }
 }
