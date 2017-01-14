@@ -37,64 +37,69 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.ChainDriveBot1;
+import org.firstinspires.ftc.teamcode.lib.Util;
+
+import static org.firstinspires.ftc.teamcode.lib.Util.printControlerStatusToTelemetry;
 
 /**
  * This OpMode uses the ChainDriveBot1 class to define the devices on the robot.
  * All device access is managed through the ChainDriveBot1 class. (See this class for device names)
  * The code is structured as a LinearOpMode
- *
+ * <p>
  * This particular OpMode executes a basic Tank Drive Teleop for the ChainDrive1 bot
  * It moves the beacon pusher with the Gampad X and B buttons respectively.
  */
 
-@TeleOp(name="DriverMode1", group="driver")
+@TeleOp(name = "DriverMode1", group = "driver")
 public class DriverMode1 extends LinearOpMode {
 
     private ChainDriveBot1 robot = new ChainDriveBot1(telemetry);
     private double beaconPusherPosition = ChainDriveBot1.BEACON_PUSHER_HOME; // Servo safe position
+    private String currentMessage = null;
 
     @Override
     public void runOpMode() {
-        double leftMotorPower;
-        double rightMotorPower;
+        double leftMotorPower = 0;
+        double rightMotorPower = 0;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
         try {
             robot.init(hardwareMap);
-        } catch (Exception e)
-        {
-            telemetry.addData("Failed to Initialize Robot: ",  e.getMessage());
+        } catch (Exception e) {
+            printMessageToTelemetry("Failed to Initialize Robot: " + e.getMessage());
         }
 
-        // We'll toggle the color sensor LEDs on and off with the Y button
+        // We'll toggle line following mode with the Y button
         // wasYAlreadyPressed and isYPressed represent the previous and current state of the y button.
         boolean wasYAlreadyPressed = false;
         boolean isYPressed = false;
 
-        boolean isLedOn = true;
+        boolean isFollowingLine = false;
 
         // Set the color sensor LEDs on in the beginning
         if (robot.colorDown != null && robot.colorFrontLeft != null && robot.colorFrontRight != null) {
             robot.colorDown.enableLed(true);
-            robot.colorFrontLeft.enableLed(true);
-            robot.colorFrontRight.enableLed(true);
+            robot.colorFrontLeft.enableLed(false);
+            robot.colorFrontRight.enableLed(false);
         } else {
-            telemetry.addData("One of the sensors is missing", "");
+            printMessageToTelemetry("One of the color sensors is missing");
         }
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("DriverMode1", "Initialized");
+
+        printMessageToTelemetry("DriverMode1: Initialized");
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        telemetry.addData("DriverMode1", "Starting");
+        printMessageToTelemetry("DriverMode1: Starting");
         telemetry.update();
 
-        try{
+        try {
             // run until the end of the match (driver presses STOP)
             while (opModeIsActive()) {
+                printStatusToTelemetry();
+
                 leftMotorPower = gamepad1.left_stick_y;
                 rightMotorPower = gamepad1.right_stick_y;
                 isYPressed = gamepad1.y;
@@ -102,15 +107,17 @@ public class DriverMode1 extends LinearOpMode {
                 // check for button state transitions.
                 if (isYPressed && !wasYAlreadyPressed) {
                     // button is transitioning to a pressed state. So Toggle LED
-                    isLedOn = !isLedOn;
-                    if (null != robot.colorDown && null != robot.colorFrontLeft && null != robot.colorFrontRight) {
-                        robot.colorDown.enableLed(isLedOn);
-                        robot.colorFrontLeft.enableLed(isLedOn);
-                        robot.colorFrontRight.enableLed(isLedOn);
-                    }
+                    isFollowingLine = !isFollowingLine;
+
                 }
 
                 wasYAlreadyPressed = isYPressed;
+
+                if (isFollowingLine) {
+                    Util.driveAlongLineEdge(robot, null);
+
+                    continue;
+                }
 
                 // If either trigger is pulled more than a little bit, cut the robot's speed 5x
                 if (gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1) {
@@ -121,19 +128,34 @@ public class DriverMode1 extends LinearOpMode {
                 if (robot.leftMotor != null) {
                     robot.leftMotor.setPower(leftMotorPower);
                 } else {
-                    telemetry.addData("left motor not installed", "");
+                    printMessageToTelemetry("left motor not installed");
                 }
                 if (robot.rightMotor != null) {
                     robot.rightMotor.setPower(rightMotorPower);
                 } else {
-                    telemetry.addData("right motor not installed", "");
+                    printMessageToTelemetry("right motor not installed");
                 }
 
-                // Use gamepad X & B to open and close the beaconPusher
-                if (gamepad1.x)
+                // Use gamepad X & B to open and close the beaconPusher. Use dpad_up to move slowly forward
+                if (gamepad1.x) {
                     beaconPusherPosition += ChainDriveBot1.BEACON_PUSHER_SPEED;
-                else if (gamepad1.b)
+                } else if (gamepad1.b) {
                     beaconPusherPosition -= ChainDriveBot1.BEACON_PUSHER_SPEED;
+                }
+
+                if (gamepad1.left_stick_button) {
+                    while (gamepad1.left_stick_button) {
+                        robot.rightMotor.setPower(-0.15);
+                        robot.leftMotor.setPower(-0.15);
+                    }
+                }
+
+                if (gamepad1.right_stick_button) {
+                    while (gamepad1.right_stick_button) {
+                        robot.rightMotor.setPower(0.15);
+                        robot.leftMotor.setPower(0.15);
+                    }
+                }
 
                 beaconPusherPosition = Range.clip(beaconPusherPosition,
                         ChainDriveBot1.BEACON_PUSHER_MIN_RANGE,
@@ -142,7 +164,7 @@ public class DriverMode1 extends LinearOpMode {
                 if (null != robot.beaconPusher) {
                     robot.beaconPusher.setPosition(beaconPusherPosition);
                 } else {
-                    telemetry.addData("No beaconPusher installed", "");
+                    printMessageToTelemetry("No beaconPusher installed");
                 }
 
                 robot.printRobotStatusToTelemetry(this);
@@ -151,8 +173,21 @@ public class DriverMode1 extends LinearOpMode {
                 robot.waitForTick(40);
             }
         } catch (Exception e) {
-            telemetry.addData("Exception hit: ", e.getMessage());
+            printMessageToTelemetry("Exception hit: " + e.getMessage());
         }
     }
 
+    public void printMessageToTelemetry(String message) {
+        currentMessage = message;
+        printStatusToTelemetry();
+    }
+
+    public void printStatusToTelemetry() {
+        if (currentMessage != null) {
+            telemetry.addData("Message", currentMessage);
+        }
+        robot.printRobotStatusToTelemetry(this);
+        printControlerStatusToTelemetry(telemetry, gamepad1);
+        telemetry.update();
+    }
 }

@@ -48,14 +48,14 @@ public class ChainDriveBot1
     public ModernRoboticsI2cRangeSensor beaconDistance = null;
     public AHRS navXDevice;
 
-    private final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
-    private final int NAVX_DIM_I2C_PORT = 0;
+    private static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
+    private static final int NAVX_DIM_I2C_PORT = 0;
     private boolean calibration_complete = false;
 
     public final static double BEACON_PUSHER_HOME = 0.45; // defines middle position for servo
     public final static double BEACON_PUSHER_SPEED = 0.01; // sets rate to move servo
-    public final static double BEACON_PUSHER_MIN_RANGE  = 0.33; // sets furthest left for servo
-    public final static double BEACON_PUSHER_MAX_RANGE = 0.65; // sets furthest right for servo
+    public final static double BEACON_PUSHER_MIN_RANGE  = 0.25; // sets furthest left for servo
+    public final static double BEACON_PUSHER_MAX_RANGE = 0.95; // sets furthest right for servo
     public final static double BEACON_PUSHER_LEFT_PUSHING_POSITION  = 0.30;
     public final static double BEACON_PUSHER_RIGHT_PUSHING_POSITION = 0.62;
 
@@ -109,13 +109,13 @@ public class ChainDriveBot1
             colorFrontLeft.setI2cAddress(I2cAddr.create8bit(0x3e));
             colorFrontLeft.enableLed(false);
         } else {
-            telemetry.addData("ChainDriveBot1.Init()", "color_front_left sensor not found");
+            telemetry.addData("ChainDriveBot1.Init()", "color_left sensor not found");
         }
         if (null != colorFrontRight) {
             colorFrontRight.setI2cAddress(I2cAddr.create8bit(0x4c));
             colorFrontRight.enableLed(false);
         } else {
-            telemetry.addData("ChainDriveBot1.init()", "color_front_right sensor not found");
+            telemetry.addData("ChainDriveBot1.init()", "color_right sensor not found");
         }
 
         beaconDistance = hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"range");
@@ -192,7 +192,7 @@ public class ChainDriveBot1
                     colorFrontLeft.red(), colorFrontLeft.green(), colorFrontLeft.blue(),
                     colorFrontRight.red(), colorFrontRight.green(), colorFrontRight.blue());
         } else {
-            opMode.telemetry.addData("One of the three sensors is missing", "");
+            opMode.telemetry.addData("One of the three color sensors is missing", "");
         }
 
         opMode.telemetry.addData("OpticalDistanceSensor", beaconDistance);
