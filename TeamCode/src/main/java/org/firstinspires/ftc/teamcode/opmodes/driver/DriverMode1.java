@@ -78,22 +78,11 @@ public class DriverMode1 extends LinearOpMode {
 
         boolean isFollowingLine = false;
 
-        // Set the color sensor LEDs on in the beginning
-        if (robot.colorDown != null && robot.colorFrontLeft != null && robot.colorFrontRight != null) {
-            robot.colorDown.enableLed(true);
-            robot.colorFrontLeft.enableLed(false);
-            robot.colorFrontRight.enableLed(false);
-        } else {
-            printMessageToTelemetry("One of the color sensors is missing");
-        }
-
         printMessageToTelemetry("DriverMode1: Initialized");
-        telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         printMessageToTelemetry("DriverMode1: Starting");
-        telemetry.update();
 
         try {
             // run until the end of the match (driver presses STOP)
@@ -166,8 +155,6 @@ public class DriverMode1 extends LinearOpMode {
                 } else {
                     printMessageToTelemetry("No beaconPusher installed");
                 }
-
-                robot.printRobotStatusToTelemetry(this);
 
                 // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
                 robot.waitForTick(40);

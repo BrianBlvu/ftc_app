@@ -52,10 +52,10 @@ public class ChainDriveBot1
     private static final int NAVX_DIM_I2C_PORT = 0;
     private boolean calibration_complete = false;
 
-    public final static double BEACON_PUSHER_HOME = 0.45; // defines middle position for servo
+    public final static double BEACON_PUSHER_HOME = 0.57; // defines middle position for servo
     public final static double BEACON_PUSHER_SPEED = 0.01; // sets rate to move servo
     public final static double BEACON_PUSHER_MIN_RANGE  = 0.25; // sets furthest left for servo
-    public final static double BEACON_PUSHER_MAX_RANGE = 0.95; // sets furthest right for servo
+    public final static double BEACON_PUSHER_MAX_RANGE = 0.90; // sets furthest right for servo
     public final static double BEACON_PUSHER_LEFT_PUSHING_POSITION  = 0.30;
     public final static double BEACON_PUSHER_RIGHT_PUSHING_POSITION = 0.62;
 
