@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  * This is NOT an opmode.
@@ -51,7 +52,9 @@ public class ChainDriveBot1
     private static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
     private static final int NAVX_DIM_I2C_PORT = 0;
     private boolean calibration_complete = false;
+    public final double COLLISION_THRESHOLD_DELTA_G = 0.2;
 
+    public final static double IMPULSE_POWER = 0.8;
     public final static double BEACON_PUSHER_HOME = 0.57; // defines middle position for servo
     public final static double BEACON_PUSHER_SPEED = 0.01; // sets rate to move servo
     public final static double BEACON_PUSHER_MIN_RANGE  = 0.25; // sets furthest left for servo
@@ -120,15 +123,10 @@ public class ChainDriveBot1
 
         beaconDistance = hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"range");
 
-        initializeNavigationController();
+//        initializeNavigationController();
     }
 
     private void initializeNavigationController(){
-//        navXDevice = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get("nav"),
-//                NAVX_DIM_I2C_PORT,
-//                AHRS.DeviceDataType.kProcessedData,
-//                NAVX_DEVICE_UPDATE_RATE_HZ);
-
         DeviceInterfaceModule dim = hardwareMap.deviceInterfaceModule.iterator().next();
         telemetry.addData("DIM Name", dim.getDeviceName());
         navXDevice = AHRS.getInstance(dim,
@@ -195,7 +193,7 @@ public class ChainDriveBot1
             opMode.telemetry.addData("One of the three color sensors is missing", "");
         }
 
-        opMode.telemetry.addData("OpticalDistanceSensor", beaconDistance);
+        opMode.telemetry.addData("OpticalDistanceSensor", beaconDistance.getDistance(DistanceUnit.CM));
     }
 
 }

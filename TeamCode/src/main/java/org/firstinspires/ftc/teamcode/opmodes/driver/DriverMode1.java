@@ -95,7 +95,7 @@ public class DriverMode1 extends LinearOpMode {
 
                 // check for button state transitions.
                 if (isYPressed && !wasYAlreadyPressed) {
-                    // button is transitioning to a pressed state. So Toggle LED
+                    // button is transitioning to a pressed state. So Toggle line following
                     isFollowingLine = !isFollowingLine;
 
                 }

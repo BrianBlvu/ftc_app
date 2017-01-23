@@ -124,6 +124,7 @@ public abstract class CatAutonomousOpMode extends LinearOpMode {
         SELECT_MISSION_OPTION_START_DELAY,
         RUN_TO_BALL,
         WAIT_FOR_HALF_LIFE_2_EPISODE_3,
-        ROLL_TO_THE_CENTER_VORTEX
+        ROLL_TO_THE_CENTER_VORTEX,
+        DONE
     }
 }

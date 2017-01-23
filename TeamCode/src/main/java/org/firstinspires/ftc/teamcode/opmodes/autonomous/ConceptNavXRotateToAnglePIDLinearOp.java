@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.text.DecimalFormat;
@@ -85,10 +86,16 @@ public class ConceptNavXRotateToAnglePIDLinearOp extends LinearOpMode {
         leftMotor = hardwareMap.dcMotor.get("left_drive");
         rightMotor = hardwareMap.dcMotor.get("right_drive");
 
-        navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get("nav"),
+        int i = 0;
+
+        DeviceInterfaceModule dim = hardwareMap.deviceInterfaceModule.iterator().next();
+        telemetry.addData("DIM Name", dim.getDeviceName());
+        telemetry.update();
+        navx_device = AHRS.getInstance(dim,
                 NAVX_DIM_I2C_PORT,
                 AHRS.DeviceDataType.kProcessedData,
                 NAVX_DEVICE_UPDATE_RATE_HZ);
+
 
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -101,6 +108,7 @@ public class ConceptNavXRotateToAnglePIDLinearOp extends LinearOpMode {
         yawPIDController = new navXPIDController( navx_device,
                                     navXPIDController.navXTimestampedDataSource.YAW);
 
+        telemetry.addData("Got to A", i++); telemetry.update();
         /* Configure the PID controller */
         yawPIDController.setSetpoint(TARGET_ANGLE_DEGREES);
         yawPIDController.setContinuous(true);
@@ -108,9 +116,11 @@ public class ConceptNavXRotateToAnglePIDLinearOp extends LinearOpMode {
         yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, TOLERANCE_DEGREES);
         yawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
 
+        telemetry.addData("Got to B", i++); telemetry.update();
         waitForStart();
-
+        telemetry.addData("Got to C", i++); telemetry.update();
         while ( !calibration_complete ) {
+            telemetry.addData("Got to D", i++); telemetry.update();
             /* navX-Micro Calibration completes automatically ~15 seconds after it is
             powered on, as long as the device is still.  To handle the case where the
             navX-Micro has not been able to calibrate successfully, hold off using
@@ -119,13 +129,14 @@ public class ConceptNavXRotateToAnglePIDLinearOp extends LinearOpMode {
             calibration_complete = !navx_device.isCalibrating();
             if (!calibration_complete) {
                 telemetry.addData("navX-Micro", "Startup Calibration in Progress");
+                telemetry.addData("Got to E", i++); telemetry.update();
             }
         }
         navx_device.zeroYaw();
-
+        telemetry.addData("Got to F", i++); telemetry.update();
         try {
             yawPIDController.enable(true);
-
+            telemetry.addData("Got to G", i++); telemetry.update();
         /* Wait for new Yaw PID output values, then update the motors
            with the new PID value with each new output value.
          */
@@ -133,12 +144,14 @@ public class ConceptNavXRotateToAnglePIDLinearOp extends LinearOpMode {
             final double TOTAL_RUN_TIME_SECONDS = 30.0;
             int DEVICE_TIMEOUT_MS = 500;
             navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
-
+            telemetry.addData("Got to H", i++); telemetry.update();
             DecimalFormat df = new DecimalFormat("#.##");
 
             while ( (runtime.time() < TOTAL_RUN_TIME_SECONDS) &&
                     !Thread.currentThread().isInterrupted()) {
+                telemetry.addData("Got to I", i++); telemetry.update();
                 if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {
+                    telemetry.addData("Got to J", i++); telemetry.update();
                     if (yawPIDResult.isOnTarget()) {
                         leftMotor.setPowerFloat();
                         rightMotor.setPowerFloat();
@@ -152,17 +165,21 @@ public class ConceptNavXRotateToAnglePIDLinearOp extends LinearOpMode {
                     }
                 } else {
 			    /* A timeout occurred */
+                    telemetry.addData("Got to K", i++); telemetry.update();
                     Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
                 }
                 telemetry.addData("Yaw", df.format(navx_device.getYaw()));
+                telemetry.addData("Got to L", i++); telemetry.update();
             }
         }
         catch(InterruptedException ex) {
              Thread.currentThread().interrupt();
         }
         finally {
+            telemetry.addData("Got to M", i++); telemetry.update();
             navx_device.close();
             telemetry.addData("LinearOp", "Complete");
+            telemetry.addData("Got to N", i++); telemetry.update();
         }
     }
 }

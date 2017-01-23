@@ -26,6 +26,7 @@ public class Util {
 
     public static void driveAlongLineEdge(ChainDriveBot1 robot, CatAutonomousOpMode opMode) {
         // TODO: Implement https://ftc-tricks.com/proportional-line-follower/
+
         double color;
         color = robot.colorDown.red();
         if (color >= ChainDriveBot1.LINE_FOLLOWING_THRESHOLD_VALUE) {
@@ -37,6 +38,18 @@ public class Util {
             robot.leftMotor.setPower(0);
             //opMode.printMessageToTelemetry("Adjusting speed of right motor: " + robot.rightMotor.getPower());
         }
+
+/*
+        int perfectColorValue = (perfectColorValue - colorSensor.getLightDetected());
+
+        if (perfectColorValue <= 0) {
+            robot.leftMotor.setPower(0.075 - perfectColorValue);
+            robot.rightMotor.setPower(0.075);
+        } else {
+            robot.leftMotor.setPower(0.075);
+            robot.rightMotor.setPower(0.075 +perfectColorValue);
+        }
+        */
     }
 
     public enum Color {

@@ -70,7 +70,7 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
     private final int DEVICE_TIMEOUT_MS = 500;
     private final DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-    private final double BEACON_DISTANCE_THRESHOLD = 0.5; // TODO: Calibrate beacon distance threshold with testing
+    private final double BEACON_DISTANCE_THRESHOLD = 20; // in CM
 
     @Override
     public void runOpMode() {
@@ -83,16 +83,17 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
         robot.colorDown.enableLed(true);
         robot.colorFrontLeft.enableLed(false);
         robot.colorFrontRight.enableLed(false);
+
         changeState(SELECT_MISSION_OPTION_START_POSITION);
         telemetryMenu();
-
         printMessageToTelemetry("Options Selected. Ready to Start");
+        sleep(1000);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        printMessageToTelemetry("Started 1");
+        //printMessageToTelemetry("Started 1");
         runtime.startTime();
-        printMessageToTelemetry("Started 2");
+        //printMessageToTelemetry("Started 2");
         Button buttonToPush = LEFT;
         // run until the end of the match (driver presses STOP)
         int i = 0;
@@ -126,13 +127,15 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
                     changeState(TURNING_TO_FIRST_LINE);
                     break;
                 case TURNING_TO_FIRST_LINE:
-                    // TODO: Fix turning code so it doesn't turn forever
-                    //turnUntilAtTargetAngle(); // something odd about this function -- perpetual movement
+                    turnUntilAtTargetAngle(); // something odd about this function -- perpetual movement
                     changeState(MOVING_TO_FIRST_LINE);
                     break;
                 case MOVING_TO_FIRST_LINE:
                     if (isOnBeaconLineEdge()) {
                         changeState(FOLLOWING_LINE);
+                    } else {
+                        robot.leftMotor.setPower(robot.IMPULSE_POWER);
+                        robot.rightMotor.setPower(robot.IMPULSE_POWER);
                     }
                     break;
                 case FOLLOWING_LINE:
@@ -174,6 +177,7 @@ public class StateBasedBeaconPusher extends CatAutonomousOpMode {
                 case STOPPED:
                     stopMotors();
             }
+            robot.waitForTick(40);
         }
     }
 
